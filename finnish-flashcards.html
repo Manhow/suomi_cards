@@ -183,18 +183,20 @@
     </div>
   </div>
   <div class="section-tabs" id="sectionTabs">
-    <button class="section-tab active" data-section="words">📖 Words</button>
-    <button class="section-tab" data-section="kpt">🔄 KPT</button>
+    <button class="section-tab active" data-section="kpt">🔄 KPT</button>
     <button class="section-tab" data-section="verbtypes">🔤 Verb Types</button>
     <button class="section-tab" data-section="pronouns">👆 Tämä/Tuo/Se</button>
     <button class="section-tab" data-section="ordinals">🔢 Ordinals</button>
+    <button class="section-tab" data-section="months">📅 Months</button>
     <button class="section-tab" data-section="cases">🏠 Cases</button>
     <button class="section-tab" data-section="partitive">📐 Partitive</button>
+    <button class="section-tab" data-section="akkusatiivi">🎯 Akkusatiivi</button>
     <button class="section-tab" data-section="genitive">🔗 Genitive</button>
     <button class="section-tab" data-section="postpos">📍 Postpositions</button>
     <button class="section-tab" data-section="questions">❓ Questions</button>
+    <button class="section-tab" data-section="words">📖 Words</button>
   </div>
-  <div class="filter-row" id="wordFilters">
+  <div class="filter-row" id="wordFilters" style="display:none">
     <div class="filter-tabs" id="tabs">
       <button class="tab active" data-cat="all">All</button>
       <button class="tab" data-cat="verbs">Verbs</button>
@@ -214,10 +216,7 @@
 </div>
 
 <main>
-  <div class="section active" id="section-words">
-    <div class="grid" id="grid"></div>
-  </div>
-  <div class="section" id="section-kpt">
+  <div class="section active" id="section-kpt">
     <div class="section-title">KPT Consonant Gradation — <span>flip to see weak grade + example</span></div>
     <div class="grid" id="grid-kpt"></div>
   </div>
@@ -233,16 +232,24 @@
     <div class="section-title">Ordinal Numbers — <span>flip to see Finnish form</span></div>
     <div class="grid" id="grid-ordinals"></div>
   </div>
+  <div class="section" id="section-months">
+    <div class="section-title">Months &amp; Seasons — <span>flip to see Finnish</span></div>
+    <div class="grid" id="grid-months"></div>
+  </div>
   <div class="section" id="section-cases">
     <div class="section-title">Finnish Cases — <span>flip to see ending + examples</span></div>
     <div class="grid" id="grid-cases"></div>
   </div>
   <div class="section" id="section-partitive">
-    <div class="section-title">Partitive Singular — <span>flip to see ending / answer + example</span></div>
+    <div class="section-title">Partitive — <span>flip to see ending + example</span></div>
     <div class="grid" id="grid-partitive"></div>
   </div>
+  <div class="section" id="section-akkusatiivi">
+    <div class="section-title">Akkusatiivi — <span>flip to see rule + example</span></div>
+    <div class="grid" id="grid-akkusatiivi"></div>
+  </div>
   <div class="section" id="section-genitive">
-    <div class="section-title">Genitive &amp; Obligation — <span>flip to see the rule + example</span></div>
+    <div class="section-title">Genitive &amp; Obligation — <span>flip to see rule + example</span></div>
     <div class="grid" id="grid-genitive"></div>
   </div>
   <div class="section" id="section-postpos">
@@ -252,6 +259,9 @@
   <div class="section" id="section-questions">
     <div class="section-title">Question Words — <span>flip to see Finnish + all case forms</span></div>
     <div class="grid" id="grid-questions"></div>
+  </div>
+  <div class="section" id="section-words">
+    <div class="grid" id="grid"></div>
   </div>
 </main>
 
@@ -291,6 +301,13 @@ var words = [
   {fi:"istua",en:"to sit",cat:"verbs",note:"istu-n"},
   {fi:"laulaa",en:"to sing",cat:"verbs",note:"laula-n"},
   {fi:"muistaa",en:"to remember",cat:"verbs",note:"muista-n"},
+  {fi:"unohdaa",en:"to forget",cat:"verbs",note:"unohda-n"},
+  {fi:"voida",en:"to be able to / can",cat:"verbs",note:"voi-n, voi, voivat"},
+  {fi:"täytyy",en:"must / have to",cat:"verbs",note:"minun täytyy mennä"},
+  {fi:"pitää",en:"must / should (duty)",cat:"verbs",note:"Liisan pitää lukea"},
+  {fi:"on pakko",en:"absolutely must",cat:"verbs",note:"hänen on pakko opiskella"},
+  {fi:"viedä",en:"to take / lead away",cat:"verbs",note:"vie-n"},
+  {fi:"loppua",en:"to run out / end",cat:"verbs",note:"loppuu = it runs out"},
   {fi:"ihminen",en:"person",cat:"nouns",note:"ihmise-n"},
   {fi:"mies",en:"man",cat:"nouns",note:"miehe-n"},
   {fi:"nainen",en:"woman",cat:"nouns",note:"naise-n"},
@@ -331,6 +348,23 @@ var words = [
   {fi:"posti",en:"post office / mail",cat:"nouns",note:"posti-ssa"},
   {fi:"ruotsalainen",en:"Swede / Swedish person",cat:"nouns",note:"ruotsalaise-n"},
   {fi:"Viro",en:"Estonia",cat:"nouns",note:"Viro-ssa"},
+  {fi:"esite",en:"brochure / leaflet",cat:"nouns",note:"esitteen (t→tt→t)"},
+  {fi:"hame",en:"skirt",cat:"nouns",note:"hamee-n"},
+  {fi:"käsi",en:"hand / arm",cat:"nouns",note:"käde-n (t→d)"},
+  {fi:"pikkujoulu",en:"office Christmas party",cat:"nouns",note:"pikkujoulut (plural)"},
+  {fi:"pusero",en:"blouse / sweater / top",cat:"nouns",note:"pusero-a"},
+  {fi:"sihteeri",en:"secretary",cat:"nouns",note:"sihteeri-ä"},
+  {fi:"sähköasentaja",en:"electrician",cat:"nouns",note:"sähköasentaja-n"},
+  {fi:"vaimo",en:"wife",cat:"nouns",note:"vaimo-n"},
+  {fi:"valokuva",en:"photograph",cat:"nouns",note:"valokuva-n"},
+  {fi:"äitiysloma",en:"maternity leave",cat:"nouns",note:"äitiyslomalla = on mat. leave"},
+  {fi:"pääkaupunki",en:"capital city",cat:"nouns",note:"pääkaupunki-n"},
+  {fi:"kone",en:"machine / appliance",cat:"nouns",note:"kone-en (dishwasher, plane...)"},
+  {fi:"ohjelmointi",en:"programming",cat:"nouns",note:"ohjelmointia (partitive)"},
+  {fi:"ohjelma",en:"program / software",cat:"nouns",note:"ohjelma-n"},
+  {fi:"loppu",en:"end / finished",cat:"nouns",note:"lopu-ssa — se on loppu = it's over"},
+  {fi:"leipä",en:"bread",cat:"nouns",note:"leivä-n (p→v)"},
+  {fi:"liha",en:"meat",cat:"nouns",note:"liha-a (partitive)"},
   {fi:"hyvä",en:"good",cat:"adj",note:"hyvä-ä"},
   {fi:"huono",en:"bad",cat:"adj",note:"huono-a"},
   {fi:"iso",en:"big / large",cat:"adj",note:"iso-a"},
@@ -348,6 +382,8 @@ var words = [
   {fi:"kylmä",en:"cold",cat:"adj",note:"kylmä-ssä"},
   {fi:"vapaa",en:"free / available",cat:"adj",note:"vapaa-n"},
   {fi:"täydellinen",en:"perfect / complete",cat:"adj",note:"täydellise-n"},
+  {fi:"musta",en:"black",cat:"adj",note:"musta-a"},
+  {fi:"vaalea",en:"light / fair (colour)",cat:"adj",note:"vaalea-n"},
   {fi:"minä",en:"I",cat:"other",note:"minun, minua"},
   {fi:"sinä",en:"you",cat:"other",note:"sinun, sinua"},
   {fi:"hän",en:"he / she",cat:"other",note:"hänen, häntä"},
@@ -357,9 +393,6 @@ var words = [
   {fi:"tämä",en:"this (nearby)",cat:"other",note:"tähän, tässä"},
   {fi:"se",en:"it / that",cat:"other",note:"siihen, siinä"},
   {fi:"kuka?",en:"who?",cat:"other",note:"kene-n?"},
-  {fi:"mikä?",en:"what? / which?",cat:"other",note:"minkä?"},
-  {fi:"missä?",en:"where?",cat:"other",note:"inessive"},
-  {fi:"mistä?",en:"where from?",cat:"other",note:"elative"},
   {fi:"mihin?",en:"where to?",cat:"other",note:"illative"},
   {fi:"milloin?",en:"when?",cat:"other",note:""},
   {fi:"miksi?",en:"why?",cat:"other",note:""},
@@ -386,135 +419,177 @@ var words = [
   {fi:"oikealla",en:"on the right",cat:"other",note:"oikea → oikealla"},
   {fi:"suoraan",en:"straight ahead",cat:"other",note:"suora → suoraan"},
   {fi:"täällä",en:"here / over here",cat:"other",note:""},
-  // NEW ADDITIONS
   {fi:"mitään",en:"anything / nothing",cat:"other",note:"En näe mitään (I see nothing)"},
   {fi:"monesko?",en:"which one (ordinal)?",cat:"other",note:"Monesko päivä tänään on?"},
   {fi:"monelta?",en:"at what time?",cat:"other",note:"Monelta bussi tulee?"},
   {fi:"montako?",en:"how many (exact)?",cat:"other",note:"Montako euroa? + partitive"},
   {fi:"kuinka?",en:"how? / how much?",cat:"other",note:"kuinka paljon, kuinka kauan"},
-  {fi:"kone",en:"machine / appliance",cat:"nouns",note:"kone-en (dishwasher, plane...)"},
-  {fi:"ohjelmointi",en:"programming",cat:"nouns",note:"ohjelmointia (partitive)"},
-  {fi:"ohjelma",en:"program / software",cat:"nouns",note:"ohjelma-n"},
-  {fi:"loppu",en:"end / finished",cat:"nouns",note:"lopu-ssa — also: se on loppu = it's over"},
-  {fi:"loppua",en:"to run out / to end",cat:"verbs",note:"loppuu = it runs out"},
-  {fi:"esite",en:"brochure / leaflet",cat:"nouns",note:"esitteen (t→tt→t)"},
-  {fi:"hame",en:"skirt",cat:"nouns",note:"hamee-n"},
-  {fi:"käsi",en:"hand / arm",cat:"nouns",note:"käde-n (t→d)"},
-  {fi:"musta",en:"black",cat:"adj",note:"musta-a"},
-  {fi:"pikkujoulu",en:"office Christmas party",cat:"nouns",note:"pikkujoulut (plural)"},
-  {fi:"pusero",en:"blouse / sweater / top",cat:"nouns",note:"pusero-a"},
-  {fi:"sihteeri",en:"secretary",cat:"nouns",note:"sihteeri-ä"},
-  {fi:"sähköasentaja",en:"electrician",cat:"nouns",note:"sähköasentaja-n"},
-  {fi:"takana",en:"behind / at the back",cat:"other",note:"talon takana = behind the house"},
-  {fi:"vaalea",en:"light / fair (colour)",cat:"adj",note:"vaalea-n"},
-  {fi:"vaimo",en:"wife",cat:"nouns",note:"vaimo-n"},
-  {fi:"valokuva",en:"photograph",cat:"nouns",note:"valokuva-n"},
-  {fi:"viedä",en:"to take / to lead (away)",cat:"verbs",note:"vie-n"},
-  {fi:"äitiysloma",en:"maternity leave",cat:"nouns",note:"äitiyslomalla = on mat. leave"},
-  {fi:"pääkaupunki",en:"capital city",cat:"nouns",note:"pääkaupunki-n; Helsinki on pääkaupunki"}
+  {fi:"takana",en:"behind / at the back",cat:"other",note:"talon takana = behind the house"}
 ];
 
 // ── KPT ──────────────────────────────────────────────
 var kptCards = [
-  {strong:"kk", weak:"k", example:"vakka → vaka-ssa"},
-  {strong:"pp", weak:"p", example:"pappi → papi-lla"},
-  {strong:"tt", weak:"t", example:"tyttö → tytö-ssä"},
+  {strong:"kk", weak:"k",              example:"vakka → vaka-ssa"},
+  {strong:"pp", weak:"p",              example:"pappi → papi-lla"},
+  {strong:"tt", weak:"t",              example:"tyttö → tytö-ssä"},
   {strong:"k",  weak:"∅ (disappears)", example:"jalka → jala-ssa\nlukea → lue-n"},
-  {strong:"p",  weak:"v", example:"apu → avu-lla"},
-  {strong:"t",  weak:"d", example:"katu → kadu-lla\nkoti → kodi-ssa"},
-  {strong:"nk", weak:"ng", example:"Helsinki → Helsingissä\nkaupunki → kaupungissa"},
-  {strong:"nt", weak:"nn", example:"ranta → rannalla"},
-  {strong:"mp", weak:"mm", example:"lampi → lammella"},
-  {strong:"lt", weak:"ll", example:"ilta → illalla"},
-  {strong:"rt", weak:"rr", example:"virta → virrassa"}
+  {strong:"p",  weak:"v",              example:"apu → avu-lla"},
+  {strong:"t",  weak:"d",              example:"katu → kadu-lla\nkoti → kodi-ssa"},
+  {strong:"nk", weak:"ng",             example:"Helsinki → Helsingissä\nkaupunki → kaupungissa"},
+  {strong:"nt", weak:"nn",             example:"ranta → rannalla"},
+  {strong:"mp", weak:"mm",             example:"lampi → lammella"},
+  {strong:"lt", weak:"ll",             example:"ilta → illalla"},
+  {strong:"rt", weak:"rr",             example:"virta → virrassa"}
 ];
 
 // ── VERB TYPES ──────────────────────────────────────────────
 var verbTypeCards = [
-  {type:"Type 1", ending:"-aa / -oa / -ua / -yä", rule:"Drop final vowel", example:"puhu-a → puhu-n\nostaa → osta-n\nasua → asu-n"},
-  {type:"Type 2", ending:"-da / -dä", rule:"Drop -da / -dä", example:"syö-dä → syö-n\njuo-da → juo-n\nmyy-dä → myy-n"},
-  {type:"Type 3", ending:"-lla / -nna / -rra / -sta", rule:"Drop 2 letters + add -e-", example:"men-nä → mene-n\nol-la → ole-n\npur-ra → pure-n"},
+  {type:"Type 1", ending:"-aa / -oa / -ua / -yä", rule:"Drop final vowel",      example:"puhu-a → puhu-n\nostaa → osta-n"},
+  {type:"Type 2", ending:"-da / -dä",              rule:"Drop -da / -dä",        example:"syö-dä → syö-n\njuo-da → juo-n"},
+  {type:"Type 3", ending:"-lla / -nna / -rra / -sta", rule:"Drop 2 letters + add -e-", example:"men-nä → mene-n\nol-la → ole-n"},
   {type:"Type 4", ending:"-ata / -ota / -uta / -ätä", rule:"Drop -ta + double vowel", example:"haluta → halua-n\nparata → paraa-n"},
-  {type:"Type 5", ending:"-ita / -itä", rule:"Drop -ta + add -tse-", example:"tarvita → tarvitse-n\nhäiritä → häiritsen"},
-  {type:"Type 6", ending:"-eta / -etä", rule:"Drop -ta + add -ne-", example:"kylmetä → kylmene-n\npareta → parane-n"}
+  {type:"Type 5", ending:"-ita / -itä",            rule:"Drop -ta + add -tse-",  example:"tarvita → tarvitse-n"},
+  {type:"Type 6", ending:"-eta / -etä",            rule:"Drop -ta + add -ne-",   example:"kylmetä → kylmene-n"}
 ];
 
-// ── PRONOUNS ──────────────────────────────────────────────
+// ── PRONOUNS (tämä/tuo/se) ──────────────────────────────────────────────
 var pronounCards = [
-  {base:"tämä", meaning:"this",          iness:"tässä",  illat:"tähän"},
-  {base:"nämä", meaning:"these",         iness:"näissä", illat:"näihin"},
-  {base:"tuo",   meaning:"that (over there)", iness:"tuossa",  illat:"tuohon"},
-  {base:"nuo",   meaning:"those",             iness:"noissa",  illat:"noihin"},
-  {base:"se",    meaning:"it / that",         iness:"siinä",  illat:"siihen"},
-  {base:"ne",    meaning:"they / them",       iness:"niissä", illat:"niihin"}
+  {base:"tämä", meaning:"this",           iness:"tässä",  illat:"tähän"},
+  {base:"nämä", meaning:"these",          iness:"näissä", illat:"näihin"},
+  {base:"tuo",  meaning:"that (over there)", iness:"tuossa", illat:"tuohon"},
+  {base:"nuo",  meaning:"those",          iness:"noissa", illat:"noihin"},
+  {base:"se",   meaning:"it / that",      iness:"siinä",  illat:"siihen"},
+  {base:"ne",   meaning:"they / them",    iness:"niissä", illat:"niihin"}
 ];
 
 // ── ORDINALS ──────────────────────────────────────────────
 var ordinalCards = [
-  {num:"1st",  fi:"ensimmäinen", cardinal:"yksi (1)",            example:"ensimmäinen päivä"},
-  {num:"2nd",  fi:"toinen",        cardinal:"kaksi (2)",           example:"toinen kerta"},
-  {num:"3rd",  fi:"kolmas",        cardinal:"kolme (3)",           example:"kolmas kerros"},
-  {num:"4th",  fi:"neljäs",        cardinal:"neljä (4)",           example:"neljäs luokka"},
-  {num:"5th",  fi:"viides",        cardinal:"viisi (5)",           example:"viides tammikuuta"},
-  {num:"6th",  fi:"kuudes",        cardinal:"kuusi (6)",           example:"kuudes tunti"},
-  {num:"7th",  fi:"seitsemäs",     cardinal:"seitsemän (7)",       example:"seitsemäs taivas"},
-  {num:"8th",  fi:"kahdeksas",     cardinal:"kahdeksan (8)",       example:"kahdeksas piste"},
-  {num:"9th",  fi:"yhdeksäs",      cardinal:"yhdeksän (9)",        example:"yhdeksäs aalto"},
-  {num:"10th", fi:"kymmenes",      cardinal:"kymmenen (10)",       example:"kymmenes vuosi"},
-  {num:"20th", fi:"kahdeskymmenes",cardinal:"kaksikymmentä (20)",  example:"kahdeskymmenes synttäri"},
-  {num:"50th", fi:"viideskymmenes",cardinal:"viisikymmentä (50)",  example:"viideskymmenes juhla"},
-  {num:"100th",fi:"sadas",         cardinal:"sata (100)",          example:"sadas asiakas"}
+  {num:"1st",   fi:"ensimmäinen", cardinal:"yksi (1)",           example:"ensimmäinen päivä"},
+  {num:"2nd",   fi:"toinen",      cardinal:"kaksi (2)",          example:"toinen kerta"},
+  {num:"3rd",   fi:"kolmas",      cardinal:"kolme (3)",          example:"kolmas kerros"},
+  {num:"4th",   fi:"neljäs",      cardinal:"neljä (4)",          example:"neljäs luokka"},
+  {num:"5th",   fi:"viides",      cardinal:"viisi (5)",          example:"viides tammikuuta"},
+  {num:"6th",   fi:"kuudes",      cardinal:"kuusi (6)",          example:"kuudes tunti"},
+  {num:"7th",   fi:"seitsemäs",   cardinal:"seitsemän (7)",      example:"seitsemäs taivas"},
+  {num:"8th",   fi:"kahdeksas",   cardinal:"kahdeksan (8)",      example:"kahdeksas piste"},
+  {num:"9th",   fi:"yhdeksäs",    cardinal:"yhdeksän (9)",       example:"yhdeksäs aalto"},
+  {num:"10th",  fi:"kymmenes",    cardinal:"kymmenen (10)",      example:"kymmenes vuosi"},
+  {num:"20th",  fi:"kahdeskymmenes", cardinal:"kaksikymmentä (20)", example:"kahdeskymmenes syntäri"},
+  {num:"50th",  fi:"viideskymmenes", cardinal:"viisikymmentä (50)", example:"viideskymmenes juhla"},
+  {num:"100th", fi:"sadas",       cardinal:"sata (100)",         example:"sadas asiakas"}
 ];
 
-// ── CASES ──────────────────────────────────────────────
+// ── MONTHS & SEASONS ──────────────────────────────────────────────
+var monthCards = [
+  {en:"January",   fi:"tammikuu",    note:"tammi = oak"},
+  {en:"February",  fi:"helmikuu",    note:"helmi = pearl"},
+  {en:"March",     fi:"maaliskuu",   note:"maalis = land awakens"},
+  {en:"April",     fi:"huhtikuu",    note:"huhti = clearing"},
+  {en:"May",       fi:"toukokuu",    note:"touko = sowing"},
+  {en:"June",      fi:"kesäkuu",     note:"kesä = summer"},
+  {en:"July",      fi:"heinäkuu",    note:"heinä = hay"},
+  {en:"August",    fi:"elokuu",      note:"elo = harvest"},
+  {en:"September", fi:"syyskuu",     note:"syyskuu = autumn month"},
+  {en:"October",   fi:"lokakuu",     note:"loka = mud"},
+  {en:"November",  fi:"marraskuu",   note:"marras = death (old word)"},
+  {en:"December",  fi:"joulukuu",    note:"joulu = Christmas"},
+  {en:"spring",    fi:"kevät",       note:"keväällä = in spring"},
+  {en:"summer",    fi:"kesä",        note:"kesällä = in summer"},
+  {en:"autumn",    fi:"syksy",       note:"syksyllä = in autumn"},
+  {en:"winter",    fi:"talvi",       note:"talvella = in winter"}
+];
+
+// ── CASES (only locative ones) ──────────────────────────────────────────────
 var caseCards = [
-  {name:"Inessive",    meaning:"inside / in",              ending:"-ssa / -ssä",       ex:"talo-ssa (in the house)\nkaupungi-ssa (in the city)"},
-  {name:"Elative",     meaning:"out of / from inside",     ending:"-sta / -stä",       ex:"talo-sta (from the house)\nkoulu-sta (from school)"},
-  {name:"Illative",    meaning:"into / going inside",      ending:"-(V)n / -seen",     ex:"talo-on (into the house)\nkaupunki-in (into the city)"},
-  {name:"Adessive",    meaning:"on / at (surface)",        ending:"-lla / -llä",       ex:"pöydä-llä (on the table)\nkadulla (on the street)"},
-  {name:"Ablative",    meaning:"from a surface",           ending:"-lta / -ltä",       ex:"pöydä-ltä (from the table)\nkadulta (from the street)"},
-  {name:"Allative",    meaning:"onto / towards surface",   ending:"-lle",              ex:"pöydä-lle (onto the table)\nkadulle (to the street)"},
-  {name:"Genitive",    meaning:"of / possession",          ending:"-n",                ex:"talon ovi (the house's door)\nmiehen auto (the man's car)"},
-  {name:"Partitive",   meaning:"partial / after numbers",  ending:"-a / -ä / -ta / -tä", ex:"kaksi autoa (2 cars)\njuon kahvia (drinking coffee)"},
-  {name:"Nominative",  meaning:"subject — base form",       ending:"(no ending)",       ex:"talo on iso (the house is big)\nauto on punainen"},
-  {name:"Accusative",  meaning:"completed direct object",  ending:"-n (sg) / -t (pl)", ex:"ostan talon (I buy the house)\nnäen miehen (I see the man)"}
+  {name:"Inessive",  meaning:"inside / in",           ending:"-ssa / -ssä",   ex:"talo-ssa (in the house)\nkaupungi-ssa (in the city)"},
+  {name:"Elative",   meaning:"out of / from inside",  ending:"-sta / -stä",   ex:"talo-sta (from the house)\nkoulu-sta (from school)"},
+  {name:"Illative",  meaning:"into / going inside",   ending:"-(V)n / -seen", ex:"talo-on (into the house)\nkaupunki-in (into the city)"},
+  {name:"Adessive",  meaning:"on / at (surface)",     ending:"-lla / -llä",   ex:"pöydä-llä (on the table)\nkadulla (on the street)"},
+  {name:"Ablative",  meaning:"from a surface",        ending:"-lta / -ltä",   ex:"pöydä-ltä (from the table)\nkadulta (from the street)"},
+  {name:"Allative",  meaning:"onto / towards surface",ending:"-lle",          ex:"pöydä-lle (onto the table)\nkadulle (to the street)"},
+  {name:"Genitive",  meaning:"of / possession",       ending:"-n",            ex:"talon ovi (the house's door)\nmiehen auto (the man's car)"}
 ];
 
 // ── PARTITIVE ──────────────────────────────────────────────
 var partitiveCards = [
-  // Formation
-  {sub:"formation",  front:"Words ending in -e",                  back:"-tta / -ttä",        example:"perhe → perhettä\nhuone → huonetta"},
-  {sub:"formation",  front:"Words ending in vowel\n(not -e)",     back:"-a / -ä",            example:"äiti → äitiä\nauto → autoa\nkirja → kirjaa"},
-  {sub:"formation",  front:"Words ending in consonant",           back:"-ta / -tä",          example:"mies → miestä\ntytär → tytärtä"},
-  {sub:"formation",  front:"-nen words",                          back:"-sta / -stä",        example:"ihminen → ihmistä\nnainen → naista"},
-  {sub:"formation",  front:"-uus / -yys words",                   back:"-uutta / -yyyttä",   example:"tulevaisuus → tulevaisuutta"},
-  {sub:"formation",  front:"Old Finnish: -ki, -mi, -pi, -ti, -vi",back:"i → e + -a / -ä", example:"suomi → suomea\nnimi → nimeä"},
-  {sub:"formation",  front:"Old Finnish: -hi, -li, -ni, -ri",     back:"drop -i + -ta / -tä", example:"kieli → kieltä\njoki → jokea"},
-  {sub:"formation",  front:"Old Finnish: -si",                    back:"consonant stem + -tta / -ttä", example:"vuosi → vuotta\nvesi → vettä"},
-  {sub:"exception!", front:"lapsi",                               back:"lasta",               example:"Näen lasta.\n(not *lapsia)"},
-  // Usage
-  {sub:"usage",      front:"Abstract / uncountable object",       back:"Partitive!",          example:"Äiti toi ruokaa.\nJuon kahvia."},
-  {sub:"usage",      front:"After negation",                      back:"Object in partitive", example:"En halua ostaa kirjaa.\nEn näe miehä."},
-  {sub:"usage",      front:"Verb government",                     back:"Certain verbs require it", example:"Odotan bussia.\nRakastan Suomea."},
-  {sub:"usage",      front:"Numbers 2+",                          back:"Subject/object with numerals", example:"Kaksi ihmistä odottaa.\nViisi euroa."},
-  {sub:"usage",      front:"Adjective + abstract subject",        back:"Predicate adjective agrees", example:"Vesi on kylmää.\nKahvi on hyvää."},
-  {sub:"usage",      front:"Month in dates",                      back:"Month name in partitive", example:"Tänään on viides päivä\nhuhtikuuta."},
-  {sub:"usage",      front:"on mielenkiintoista…",           back:"Impersonal predicate in partitive", example:"On hauskaa opiskella!\nOn tärkeää nukkua."},
-  {sub:"usage",      front:"ilman, ennen…",                  back:"After certain postpositions", example:"En voi elää ilman sinua!"},
-  {sub:"usage",      front:"Part of a whole",                     back:"Partitive marks a portion", example:"Lapinlahti on Suomea.\n(Lapinlahti is part of Finland)"},
-  {sub:"usage",      front:"Material with OLLA",                  back:"Predicate nominal in partitive", example:"Sormus on kultaa ja hopeaa."},
-  {sub:"usage",      front:"Greetings & wishes",                  back:"Fixed expressions in partitive", example:"Hyvää ruokahalua!\nHyvää päivää!"},
-  {sub:"usage",      front:"Doubt / existence",                   back:"Existential question → partitive", example:"Onko täällä Pekkaa?\nvs. Onko Pekka täällä?"},
-  {sub:"usage",      front:"Comparison",                          back:"Pronoun in partitive", example:"Hän on minua vanhempi.\n(He is older than me)"}
+  {sub:"ending",  front:"Words ending in -e",                 back:"-tta / -ttä",          example:"perhe → perhettä\nhuone → huonetta"},
+  {sub:"ending",  front:"Words ending in consonant",          back:"-ta / -tä",             example:"mies → miestä\ntytär → tytärtä"},
+  {sub:"ending",  front:"Words ending in vowel (not -e)",     back:"-a / -ä",               example:"äiti → äitiä\nauto → autoa\nkirja → kirjaa"},
+  {sub:"old Finnish", front:"Nature/human words: -ki,-mi,-pi,-ti,-vi", back:"i → e + -a / -ä", example:"suomi → suomea\nnimi → nimeä"},
+  {sub:"old Finnish", front:"Words ending in -hi,-li,-ni,-ri",back:"drop -i + -ta / -tä",   example:"kieli → kieltä\njoki → jokea"},
+  {sub:"old Finnish", front:"Words ending in -si",            back:"consonant stem + -tta / -ttä", example:"vuosi → vuotta\nvesi → vettä"},
+  {sub:"pronoun", front:"Personal pronouns in partitive",     back:"minua / sinua / häntä\nmeitä / teitä / heitä", example:"Hän katsoo minua.\nOdotan sinua."}
+];
+
+// ── AKKUSATIIVI ──────────────────────────────────────────────
+var akkCards = [
+  {sub:"when",    front:"Completed / concrete action",        back:"Use accusative",        example:"Ostan talon. (I buy the house)\nLuen kirjan. (I read the book)"},
+  {sub:"when",    front:"Result-oriented action",             back:"Use accusative",        example:"Kirjoitan kirjeen. (I write a letter)\nTeen työn. (I do the job)"},
+  {sub:"vs part", front:"Accusative vs Partitive",            back:"Acc = complete\nPart = ongoing/abstract", example:"Juon kahvin. (I drink the coffee — all of it)\nJuon kahvia. (I drink coffee)"},
+  {sub:"ending",  front:"Singular accusative ending",         back:"-n (same as genitive)", example:"talon, kirjan, miehen"},
+  {sub:"ending",  front:"Plural accusative ending",           back:"-t",                    example:"talot, kirjat, miehet"},
+  {sub:"pronouns",front:"Personal pronouns (accusative)",     back:"minut / sinut / hänet\nmeidät / teidät / heidät", example:"Hän näkee minut.\nNäen sinut huomenna."},
+  {sub:"negation",front:"After negation → what case?",        back:"Partitive (never acc.)", example:"En osta taloa.\nEn lue kirjaa."}
+];
+
+// ── GENITIVE ──────────────────────────────────────────────
+var genitiveCards = [
+  {sub:"formation", front:"Genitive ending",               back:"-n",                    example:"talo → talon\nauto → auton\nnimi → nimen"},
+  {sub:"formation", front:"Question: whose / of what?",    back:"kenen? / minkä?",        example:"Kenen auto?\nMinkä hinta?"},
+  {sub:"formation", front:"Postpositions use genitive",    back:"noun + postposition",    example:"talon takana (behind the house)\nauton sisällä (inside the car)"},
+  {sub:"obligation",front:"täytyy + infinitive",           back:"must / have to (neutral)", example:"Minun täytyy mennä.\nHänen täytyy opiskella."},
+  {sub:"obligation",front:"pitää + infinitive",            back:"must / should (stronger duty)", example:"Liisan pitää lukea paljon."},
+  {sub:"obligation",front:"on pakko + infinitive",         back:"absolutely must (no choice)", example:"Hänen on pakko opiskella hyvin."},
+  {sub:"obligation",front:"tarvitsee + infinitive",        back:"need to (positive)",     example:"Minun tarvitsee ostaa kirja."},
+  {sub:"obligation",front:"ei tarvitse + infinitive",      back:"don't need to",          example:"Sinun ei tarvitse tulla."},
+  {sub:"structure", front:"Who carries the obligation?",   back:"Genitive pronoun + verb", example:"Minun täytyy → I must\nSinun täytyy → you must\nHänen täytyy → he/she must"},
+  {sub:"structure", front:"Obligation with a name",        back:"Name in genitive + pitää/täytyy", example:"Liisan pitää lukea.\nPekan täytyy tulla."},
+  {sub:"structure", front:"Strength of obligation",        back:"pakko > täytyy > pitää > tarvitsee", example:"pakko = no choice\ntäytyy = must\npitää = should\ntarvitsee = need to"}
+];
+
+// ── POSTPOSITIONS ──────────────────────────────────────────────
+var postposCards = [
+  {post:"edessä",  meaning:"in front of",             example:"talon edessä\n(in front of the house)"},
+  {post:"takana",  meaning:"behind / at the back of", example:"auton takana\n(behind the car)"},
+  {post:"alla",    meaning:"under / below",           example:"pöydän alla\n(under the table)"},
+  {post:"yllä",    meaning:"above / over",            example:"pilven yllä\n(above the cloud)"},
+  {post:"päällä",  meaning:"on top of",               example:"pöydän päällä\n(on the table)"},
+  {post:"vieressä",meaning:"next to / beside",        example:"kaupan vieressä\n(next to the shop)"},
+  {post:"lähellä", meaning:"near / close to",         example:"kodin lähellä\n(near the home)"},
+  {post:"välissä", meaning:"between",                 example:"talojen välissä\n(between the houses)"},
+  {post:"vasemmalla puolella", meaning:"on the left side of", example:"pankin vasemmalla puolella"},
+  {post:"oikealla puolella",   meaning:"on the right side of", example:"kaupan oikealla puolella"},
+  {post:"luona",   meaning:"at / near (someone's place)", example:"Pekan luona\n(at Pekka's place)"},
+  {post:"kanssa",  meaning:"with / together with",    example:"ystävän kanssa\n(with a friend)"},
+  {post:"kuluttua",meaning:"after (time elapsed)",    example:"tunnin kuluttua\n(after an hour)"},
+  {post:"jälkeen", meaning:"after (in sequence)",     example:"lounaan jälkeen\n(after lunch)"}
+];
+
+// ── QUESTIONS ──────────────────────────────────────────────
+var questionCards = [
+  {q:"kuka?",    en:"who?",                   forms:"kenen? (whose)\nketä? (whom)",              example:"Kuka sinä olet?\nKenen kirja tämä on?"},
+  {q:"mikä?",    en:"what? / which?",         forms:"minkä? (gen.)\nmitä? (partit.)",            example:"Mikä tämä on?\nMitä haluat?"},
+  {q:"missä?",   en:"where? (location)",      forms:"from: mistä?\nto: mihin? / minne?",        example:"Missä olet?\nMistä tulet?\nMinne menet?"},
+  {q:"milloin?", en:"when?",                  forms:"also: koska?\nmillon? (spoken)",            example:"Milloin tulet?\nKoska lähdet?"},
+  {q:"miksi?",   en:"why?",                   forms:"also: minkä takia?",                         example:"Miksi et tullut?"},
+  {q:"miten? / kuinka?", en:"how?",           forms:"miten = manner\nkuinka = degree",           example:"Miten menee?\nKuinka paljon?"},
+  {q:"kuinka kauan?", en:"how long?",         forms:"duration question",                          example:"Kuinka kauan olet asunut täällä?"},
+  {q:"kuinka usein?", en:"how often?",        forms:"frequency question",                         example:"Kuinka usein käyt salilla?"},
+  {q:"paljonko?",en:"how much / many?",       forms:"paljonko = price\npartitive follows",       example:"Paljonko se maksaa?"},
+  {q:"montako?", en:"how many (exact count)?",forms:"+ partitive",                               example:"Montako lasta sinulla on?"},
+  {q:"monesko?", en:"which (ordinal number)?",forms:"answer: ensimmäinen, toinen...",             example:"Monesko päivä tänään on?"},
+  {q:"monelta?", en:"at what time?",          forms:"answer: kahdelta, kolmelta...",              example:"Monelta bussi lähtee?"},
+  {q:"kumpi?",   en:"which (of two)?",        forms:"kumpaa? (partit.)",                          example:"Kumpi on parempi?"},
+  {q:"millainen?",en:"what kind of?",         forms:"adjective question\n+ noun in same case",   example:"Millainen sää on?"}
 ];
 
 // ── STATE ──────────────────────────────────────────────
-var currentFilter = 'all';
-var currentSection = 'words';
 function tryLoadLearned() {
   try { return new Set(JSON.parse(localStorage.getItem('fi_learned') || '[]')); } catch(e) { return new Set(); }
 }
 var learned = tryLoadLearned();
+var currentFilter = 'all';
+var currentSection = 'kpt';
 var displayedWords = words.slice();
 
 function saveLearnedState() {
@@ -522,41 +597,43 @@ function saveLearnedState() {
 }
 function shuffle(arr) {
   var a = arr.slice();
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
 function getFiltered() {
   if (currentFilter === 'all') return words.slice();
-  if (currentFilter === 'learned') return words.filter(w => learned.has(w.fi));
-  return words.filter(w => w.cat === currentFilter);
+  if (currentFilter === 'learned') return words.filter(function(w) { return learned.has(w.fi); });
+  return words.filter(function(w) { return w.cat === currentFilter; });
 }
 
 // ── CARD FACTORY ──────────────────────────────────────────────
 function makeCard(frontHTML, backHTML, learnKey) {
-  const wrap = document.createElement('div');
+  var wrap = document.createElement('div');
   wrap.className = 'card-wrap' + (learnKey && learned.has(learnKey) ? ' learned' : '');
-  const tilt = (Math.random()*4-2).toFixed(2);
-  wrap.style.transform = 'rotate('+tilt+'deg)';
+  var tilt = (Math.random() * 4 - 2).toFixed(2);
+  wrap.style.transform = 'rotate(' + tilt + 'deg)';
   wrap.innerHTML = '<div class="card-inner">'
-    + '<div class="card-face card-front">'+frontHTML+'</div>'
-    + '<div class="card-face card-back">'+backHTML+'</div>'
+    + '<div class="card-face card-front">' + frontHTML + '</div>'
+    + '<div class="card-face card-back">' + backHTML + '</div>'
     + '</div>';
-  let pt;
+  var pt;
   wrap.addEventListener('click', function() { wrap.classList.toggle('flipped'); updateStats(); });
   if (learnKey) {
-    const go = function() { pt = setTimeout(function() {
-      if (learned.has(learnKey)) learned.delete(learnKey); else learned.add(learnKey);
-      wrap.classList.toggle('learned', learned.has(learnKey));
-      saveLearnedState(); updateStats();
-    }, 600); };
-    const stop = function() { clearTimeout(pt); };
+    var go = function() {
+      pt = setTimeout(function() {
+        if (learned.has(learnKey)) learned.delete(learnKey); else learned.add(learnKey);
+        wrap.classList.toggle('learned', learned.has(learnKey));
+        saveLearnedState(); updateStats();
+      }, 600);
+    };
+    var stop = function() { clearTimeout(pt); };
     wrap.addEventListener('mousedown', go);
     wrap.addEventListener('mouseup', stop);
     wrap.addEventListener('mouseleave', stop);
-    wrap.addEventListener('touchstart', go, {passive:true});
+    wrap.addEventListener('touchstart', go, {passive: true});
     wrap.addEventListener('touchend', stop);
   }
   return wrap;
@@ -571,10 +648,10 @@ function renderWords() {
     updateStats(); return;
   }
   displayedWords.forEach(function(w, i) {
-    var front = '<div class="card-en">'+w.en+'</div>';
-    var back = '<div class="card-fi">'+w.fi+'</div>'+(w.note ? '<div class="card-note">'+w.note+'</div>' : '');
+    var front = '<div class="card-en">' + w.en + '</div>';
+    var back = '<div class="card-fi">' + w.fi + '</div>' + (w.note ? '<div class="card-note">' + w.note + '</div>' : '');
     var c = makeCard(front, back, w.fi);
-    c.style.animationDelay = Math.min(i*15,300)+'ms';
+    c.style.animationDelay = Math.min(i * 15, 300) + 'ms';
     grid.appendChild(c);
   });
   updateStats();
@@ -584,13 +661,10 @@ function renderKPT() {
   var grid = document.getElementById('grid-kpt');
   grid.innerHTML = '';
   kptCards.forEach(function(c, i) {
-    var front = '<div class="g-label">strong grade → ?</div>'
-              + '<div class="g-main">'+c.strong+'</div>';
-    var back  = '<div class="g-label">weak grade</div>'
-              + '<div class="g-result">'+c.weak+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'kpt_'+i);
-    card.style.animationDelay = i*40+'ms';
+    var front = '<div class="g-label">strong grade → ?</div><div class="g-main">' + c.strong + '</div>';
+    var back  = '<div class="g-label">weak grade</div><div class="g-result">' + c.weak + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'kpt_' + i);
+    card.style.animationDelay = i * 40 + 'ms';
     grid.appendChild(card);
   });
 }
@@ -599,13 +673,10 @@ function renderVerbTypes() {
   var grid = document.getElementById('grid-verbtypes');
   grid.innerHTML = '';
   verbTypeCards.forEach(function(c, i) {
-    var front = '<div class="g-label">'+c.type+'</div>'
-              + '<div class="g-main" style="font-size:1.15rem">'+c.ending+'</div>'
-              + '<div class="g-sub">stem rule?</div>';
-    var back  = '<div class="g-sub" style="color:var(--accent3);font-size:0.65rem;margin-bottom:6px">'+c.rule+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'vt_'+i);
-    card.style.animationDelay = i*50+'ms';
+    var front = '<div class="g-label">' + c.type + '</div><div class="g-main" style="font-size:1.15rem">' + c.ending + '</div><div class="g-sub">stem rule?</div>';
+    var back  = '<div class="g-sub" style="color:var(--accent3);font-size:0.65rem;margin-bottom:6px">' + c.rule + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'vt_' + i);
+    card.style.animationDelay = i * 50 + 'ms';
     grid.appendChild(card);
   });
 }
@@ -614,17 +685,10 @@ function renderPronouns() {
   var grid = document.getElementById('grid-pronouns');
   grid.innerHTML = '';
   pronounCards.forEach(function(c, i) {
-    var front = '<div class="g-label">base form</div>'
-              + '<div class="g-main">'+c.base+'</div>'
-              + '<div class="g-sub">"'+c.meaning+'"</div>'
-              + '<div class="g-sub">inessive / illative?</div>';
-    var back  = '<div class="g-label">inessive / illative</div>'
-              + '<div class="g-result" style="font-size:1.35rem">'+c.iness+'</div>'
-              + '<div class="g-sub" style="margin:3px 0">in '+c.meaning+'</div>'
-              + '<div class="g-result2">'+c.illat+'</div>'
-              + '<div class="g-sub">into '+c.meaning+'</div>';
-    var card = makeCard(front, back, 'pron_'+i);
-    card.style.animationDelay = i*50+'ms';
+    var front = '<div class="g-label">base form</div><div class="g-main">' + c.base + '</div><div class="g-sub">"' + c.meaning + '"</div><div class="g-sub">inessive / illative?</div>';
+    var back  = '<div class="g-label">inessive / illative</div><div class="g-result" style="font-size:1.35rem">' + c.iness + '</div><div class="g-sub" style="margin:3px 0">in ' + c.meaning + '</div><div class="g-result2">' + c.illat + '</div><div class="g-sub">into ' + c.meaning + '</div>';
+    var card = makeCard(front, back, 'pron_' + i);
+    card.style.animationDelay = i * 50 + 'ms';
     grid.appendChild(card);
   });
 }
@@ -633,12 +697,22 @@ function renderOrdinals() {
   var grid = document.getElementById('grid-ordinals');
   grid.innerHTML = '';
   ordinalCards.forEach(function(c, i) {
-    var front = '<div class="g-label">ordinal in Finnish?</div>'
-              + '<div class="g-main">'+c.num+'</div>';
-    var back  = '<div class="g-result" style="font-size:1.35rem">'+c.fi+'</div>'
-              + '<div class="g-example">'+c.cardinal+'\n'+c.example+'</div>';
-    var card = makeCard(front, back, 'ord_'+i);
-    card.style.animationDelay = i*40+'ms';
+    var front = '<div class="g-label">ordinal in Finnish?</div><div class="g-main">' + c.num + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.35rem">' + c.fi + '</div><div class="g-example">' + c.cardinal + '\n' + c.example + '</div>';
+    var card = makeCard(front, back, 'ord_' + i);
+    card.style.animationDelay = i * 40 + 'ms';
+    grid.appendChild(card);
+  });
+}
+
+function renderMonths() {
+  var grid = document.getElementById('grid-months');
+  grid.innerHTML = '';
+  monthCards.forEach(function(c, i) {
+    var front = '<div class="card-en">' + c.en + '</div>';
+    var back  = '<div class="card-fi">' + c.fi + '</div><div class="card-note">' + c.note + '</div>';
+    var card = makeCard(front, back, 'mo_' + i);
+    card.style.animationDelay = i * 35 + 'ms';
     grid.appendChild(card);
   });
 }
@@ -647,14 +721,10 @@ function renderCases() {
   var grid = document.getElementById('grid-cases');
   grid.innerHTML = '';
   caseCards.forEach(function(c, i) {
-    var front = '<div class="g-label">case</div>'
-              + '<div class="g-main" style="font-size:1.35rem">'+c.name+'</div>'
-              + '<div class="g-sub">"'+c.meaning+'"</div>'
-              + '<div class="g-sub">ending?</div>';
-    var back  = '<div class="g-result" style="font-size:1.3rem">'+c.ending+'</div>'
-              + '<div class="g-example">'+c.ex+'</div>';
-    var card = makeCard(front, back, 'case_'+i);
-    card.style.animationDelay = i*40+'ms';
+    var front = '<div class="g-label">case</div><div class="g-main" style="font-size:1.35rem">' + c.name + '</div><div class="g-sub">"' + c.meaning + '"</div><div class="g-sub">ending?</div>';
+    var back  = '<div class="g-result" style="font-size:1.3rem">' + c.ending + '</div><div class="g-example">' + c.ex + '</div>';
+    var card = makeCard(front, back, 'case_' + i);
+    card.style.animationDelay = i * 40 + 'ms';
     grid.appendChild(card);
   });
 }
@@ -663,36 +733,30 @@ function renderPartitive() {
   var grid = document.getElementById('grid-partitive');
   grid.innerHTML = '';
   partitiveCards.forEach(function(c, i) {
-    var isForm = c.sub === 'formation';
-    var color = isForm ? 'var(--accent)' : 'var(--accent2)';
-    var sublabel = isForm ? 'formation rule' : 'when to use';
-    var front = '<div class="g-label" style="color:'+color+'">'+sublabel+'</div>'
-              + '<div class="g-main" style="font-size:1.1rem">'+c.front+'</div>';
-    var back  = '<div class="g-result" style="font-size:1.25rem;color:'+color+'">'+c.back+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'part_'+i);
-    card.style.animationDelay = Math.min(i*30,400)+'ms';
+    var isOld = c.sub === 'old Finnish';
+    var isPron = c.sub === 'pronoun';
+    var color = isPron ? 'var(--accent3)' : isOld ? 'var(--accent2)' : 'var(--accent)';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div><div class="g-main" style="font-size:1.05rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.2rem;color:' + color + '">' + c.back + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'part_' + i);
+    card.style.animationDelay = i * 50 + 'ms';
     grid.appendChild(card);
   });
 }
 
-// ── GENITIVE ──────────────────────────────────────────────
-var genitiveCards = [
-  // Formation
-  {sub:"formation", front:"Genitive ending", back:"-n", example:"talo → talon\nauto → auton\nnimi → nimen"},
-  {sub:"formation", front:"Question: whose / of what?", back:"kenen? / minkä?", example:"Kenen auto?\nMinkä hinta?"},
-  {sub:"formation", front:"Postpositions use genitive", back:"noun + postposition", example:"talon takana (behind the house)\nauton sisällä (inside the car)"},
-  // Obligation
-  {sub:"obligation", front:"täytyy + infinitive", back:"must / have to (neutral)", example:"Minun täytyy mennä.\n(I have to go)\nHänen täytyy opiskella."},
-  {sub:"obligation", front:"pitää + infinitive", back:"must / should (stronger duty)", example:"Liisan pitää lukea paljon.\n(Liisa must read a lot)"},
-  {sub:"obligation", front:"on pakko + infinitive", back:"absolutely must (no choice)", example:"Hänen on pakko opiskella hyvin.\n(He absolutely has to study well)"},
-  {sub:"obligation", front:"tarvitsee + infinitive", back:"need to (positive)", example:"Minun tarvitsee ostaa kirja.\n(I need to buy a book)"},
-  {sub:"obligation", front:"ei tarvitse + infinitive", back:"don't need to", example:"Sinun ei tarvitse tulla.\n(You don't need to come)"},
-  // How obligation works
-  {sub:"structure", front:"Who carries the obligation?", back:"Genitive pronoun + verb", example:"Minun täytyy → I must\nSinun täytyy → you must\nHänen täytyy → he/she must"},
-  {sub:"structure", front:"Obligation with a name", back:"Name in genitive + pitää/täytyy", example:"Liisan pitää lukea.\nPekan täytyy tulla."},
-  {sub:"structure", front:"Strength of obligation", back:"pakko > täytyy > pitää > tarvitsee", example:"pakko = no choice\ntäytyy = must\npitää = should\ntarvitsee = need to"}
-];
+function renderAkkusatiivi() {
+  var grid = document.getElementById('grid-akkusatiivi');
+  grid.innerHTML = '';
+  akkCards.forEach(function(c, i) {
+    var colors = {when:'var(--accent)', ending:'var(--accent2)', pronouns:'var(--accent3)', negation:'var(--muted)', 'vs part':'var(--accent2)'};
+    var color = colors[c.sub] || 'var(--accent)';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div><div class="g-main" style="font-size:1.05rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.15rem;color:' + color + '">' + c.back + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'akk_' + i);
+    card.style.animationDelay = i * 45 + 'ms';
+    grid.appendChild(card);
+  });
+}
 
 function renderGenitive() {
   var grid = document.getElementById('grid-genitive');
@@ -700,79 +764,34 @@ function renderGenitive() {
   genitiveCards.forEach(function(c, i) {
     var colors = {formation:'var(--accent)', obligation:'var(--accent2)', structure:'var(--accent3)'};
     var color = colors[c.sub] || 'var(--accent)';
-    var front = '<div class="g-label" style="color:'+color+'">'+c.sub+'</div>'
-              + '<div class="g-main" style="font-size:1.1rem">'+c.front+'</div>';
-    var back  = '<div class="g-result" style="font-size:1.2rem;color:'+color+'">'+c.back+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'gen_'+i);
-    card.style.animationDelay = Math.min(i*40, 400)+'ms';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div><div class="g-main" style="font-size:1.1rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.2rem;color:' + color + '">' + c.back + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'gen_' + i);
+    card.style.animationDelay = Math.min(i * 40, 400) + 'ms';
     grid.appendChild(card);
   });
 }
-
-// ── POSTPOSITIONS ──────────────────────────────────────────────
-var postposCards = [
-  {post:"edessä",  meaning:"in front of",           example:"talon edessä\n(in front of the house)"},
-  {post:"takana",   meaning:"behind / at the back of", example:"auton takana\n(behind the car)"},
-  {post:"alla",     meaning:"under / below",           example:"pöydän alla\n(under the table)"},
-  {post:"yllä",     meaning:"above / over",           example:"pilven yllä\n(above the cloud)"},
-  {post:"päällä",   meaning:"on top of",             example:"pöydän päällä\n(on the table)"},
-  {post:"vieressä", meaning:"next to / beside",       example:"kaupan vieressä\n(next to the shop)"},
-  {post:"lähellä",  meaning:"near / close to",       example:"kodin lähellä\n(near the home)"},
-  {post:"välissä",  meaning:"between",               example:"talojen välissä\n(between the houses)"},
-  {post:"vasemmalla puolella", meaning:"on the left side of", example:"pankin vasemmalla puolella\n(to the left of the bank)"},
-  {post:"oikealla puolella",  meaning:"on the right side of", example:"kaupan oikealla puolella\n(to the right of the shop)"},
-  {post:"luona",    meaning:"at / near (someone’s place)", example:"Pekan luona\n(at Pekka’s place)\nkoiran luona (by the dog)"},
-  {post:"kanssa",   meaning:"with / together with",    example:"ystävän kanssa\n(with a friend)\nsinun kanssa (with you)"},
-  {post:"kuluttua", meaning:"after (time elapsed)",    example:"tunnin kuluttua\n(after an hour)\nviikon kuluttua (in a week)"},
-  {post:"jälkeen",  meaning:"after (in sequence)",     example:"lounaan jälkeen\n(after lunch)\ntyön jälkeen (after work)"}
-];
 
 function renderPostpos() {
   var grid = document.getElementById('grid-postpos');
   grid.innerHTML = '';
   postposCards.forEach(function(c, i) {
-    var front = '<div class="g-label">Gen. + ?</div>'
-              + '<div class="g-main">'+c.post+'</div>';
-    var back  = '<div class="g-result" style="font-size:1.1rem;color:var(--accent2)">'+c.meaning+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'pp_'+i);
-    card.style.animationDelay = Math.min(i*40, 400)+'ms';
+    var front = '<div class="g-label">Gen. + ?</div><div class="g-main">' + c.post + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.1rem;color:var(--accent2)">' + c.meaning + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'pp_' + i);
+    card.style.animationDelay = Math.min(i * 40, 400) + 'ms';
     grid.appendChild(card);
   });
 }
-
-// ── QUESTION WORDS ──────────────────────────────────────────────
-var questionCards = [
-  {q:"kuka?",    en:"who?",                  forms:"kenen? (whose)\nketä? (whom)\nkenenä? (as who)",      example:"Kuka sinä olet?\nKenen kirja tämä on?"},
-  {q:"mikä?",    en:"what? / which?",        forms:"minkä? (gen.)\nmitä? (partit.)\nmissä? (in what)",  example:"Mikä tämä on?\nMitä haluat?"},
-  {q:"missä?",   en:"where? (location)",     forms:"case: inessive\nfrom: mistä?\nto: mihin?",           example:"Missä olet?\nMistä tulet?\nMinne / mihin menet?"},
-  {q:"mistä?",   en:"where from?",           forms:"case: elative\nanswer: Helsingistä",               example:"Mistä sinä olet kotoisin?"},
-  {q:"mihin? / minne?", en:"where to?",      forms:"case: illative\nanswer: Helsinkiin",                example:"Mihin menet?\nMinne bussi menee?"},
-  {q:"milloin?", en:"when?",                 forms:"also: koska?\nmillon? (spoken)",                    example:"Milloin tulet?\nKoska lähdet?"},
-  {q:"miksi?",   en:"why?",                  forms:"also: minkä takia?\n(for what reason)",            example:"Miksi et tullut?\nMinkä takia?"},
-  {q:"miten? / kuinka?", en:"how?",          forms:"miten = how (manner)\nkuinka = how (degree)",       example:"Miten menee?\nKuinka paljon?"},
-  {q:"kuinka kauan?", en:"how long?",        forms:"duration question\n+ time expression",              example:"Kuinka kauan olet asunut täällä?"},
-  {q:"kuinka usein?", en:"how often?",       forms:"frequency question",                               example:"Kuinka usein käyt salilla?"},
-  {q:"paljonko? / kuinka paljon?", en:"how much / how many?", forms:"paljonko = price/quantity\npartitive follows", example:"Paljonko se maksaa?\nKuinka paljon rahaa?"},
-  {q:"montako?", en:"how many (exact count)?",forms:"+ partitive\nmontako = exact number",             example:"Montako lasta sinulla on?"},
-  {q:"monesko?", en:"which (ordinal number)?",forms:"asks for ordinal\nanswer: ensimmäinen, toinen...", example:"Monesko päivä tänään on?\nMoneskoko sinä olit?"},
-  {q:"monelta?", en:"at what time?",         forms:"asks clock time\nanswer: kahdelta, kolmelta...",    example:"Monelta bussi lähtee?\nMonelta tapaaminen on?"},
-  {q:"kumpi?",   en:"which (of two)?",       forms:"kumpaa? (partit.)\nkummalla? (adessive)",          example:"Kumpi on parempi?\nKumpaa haluat?"},
-  {q:"millainen? / minkälainen?", en:"what kind of? / what’s it like?", forms:"+ noun in same case\nadjective question", example:"Millainen sää on?\nMinkälainen henkilö hän on?"}
-];
 
 function renderQuestions() {
   var grid = document.getElementById('grid-questions');
   grid.innerHTML = '';
   questionCards.forEach(function(c, i) {
-    var front = '<div class="g-label">question word</div>'
-              + '<div class="g-main">'+c.en+'</div>';
-    var back  = '<div class="g-result" style="font-size:1.35rem">'+c.q+'</div>'
-              + '<div class="g-sub" style="color:var(--accent3);margin-top:6px">'+c.forms+'</div>'
-              + '<div class="g-example">'+c.example+'</div>';
-    var card = makeCard(front, back, 'qw_'+i);
-    card.style.animationDelay = Math.min(i*35, 400)+'ms';
+    var front = '<div class="g-label">question word</div><div class="g-main">' + c.en + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.35rem">' + c.q + '</div><div class="g-sub" style="color:var(--accent3);margin-top:6px">' + c.forms + '</div><div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'qw_' + i);
+    card.style.animationDelay = Math.min(i * 35, 400) + 'ms';
     grid.appendChild(card);
   });
 }
@@ -792,9 +811,22 @@ document.getElementById('sectionTabs').addEventListener('click', function(e) {
   e.target.classList.add('active');
   currentSection = e.target.dataset.section;
   Array.prototype.forEach.call(document.querySelectorAll('.section'), function(s) { s.classList.remove('active'); });
-  document.getElementById('section-'+currentSection).classList.add('active');
+  document.getElementById('section-' + currentSection).classList.add('active');
   document.getElementById('wordFilters').style.display = currentSection === 'words' ? 'flex' : 'none';
-  var map = {kpt:renderKPT, verbtypes:renderVerbTypes, pronouns:renderPronouns, ordinals:renderOrdinals, cases:renderCases, partitive:renderPartitive, genitive:renderGenitive, postpos:renderPostpos, questions:renderQuestions};
+  var map = {
+    kpt: renderKPT,
+    verbtypes: renderVerbTypes,
+    pronouns: renderPronouns,
+    ordinals: renderOrdinals,
+    months: renderMonths,
+    cases: renderCases,
+    partitive: renderPartitive,
+    akkusatiivi: renderAkkusatiivi,
+    genitive: renderGenitive,
+    postpos: renderPostpos,
+    questions: renderQuestions,
+    words: renderWords
+  };
   if (map[currentSection]) map[currentSection]();
   updateStats();
 });
@@ -809,7 +841,21 @@ document.getElementById('tabs').addEventListener('click', function(e) {
 });
 
 document.getElementById('shuffleBtn').addEventListener('click', function() {
-  if (currentSection === 'words') { displayedWords = shuffle(displayedWords); renderWords(); }
+  var grids = {
+    words: function() { displayedWords = shuffle(displayedWords); renderWords(); },
+    kpt: function() { kptCards = shuffle(kptCards); renderKPT(); },
+    verbtypes: function() { verbTypeCards = shuffle(verbTypeCards); renderVerbTypes(); },
+    pronouns: function() { pronounCards = shuffle(pronounCards); renderPronouns(); },
+    ordinals: function() { ordinalCards = shuffle(ordinalCards); renderOrdinals(); },
+    months: function() { monthCards = shuffle(monthCards); renderMonths(); },
+    cases: function() { caseCards = shuffle(caseCards); renderCases(); },
+    partitive: function() { partitiveCards = shuffle(partitiveCards); renderPartitive(); },
+    akkusatiivi: function() { akkCards = shuffle(akkCards); renderAkkusatiivi(); },
+    genitive: function() { genitiveCards = shuffle(genitiveCards); renderGenitive(); },
+    postpos: function() { postposCards = shuffle(postposCards); renderPostpos(); },
+    questions: function() { questionCards = shuffle(questionCards); renderQuestions(); }
+  };
+  if (grids[currentSection]) grids[currentSection]();
 });
 
 document.getElementById('resetBtn').addEventListener('click', function() {
@@ -818,8 +864,9 @@ document.getElementById('resetBtn').addEventListener('click', function() {
   renderWords(); updateStats();
 });
 
-// Init
-renderWords();
+// Init — start on KPT
+renderKPT();
+updateStats();
 </script>
 </body>
 </html>
