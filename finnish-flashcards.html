@@ -188,6 +188,7 @@
     <button class="section-tab" data-section="pronouns">👆 Tämä/Tuo/Se</button>
     <button class="section-tab" data-section="ordinals">🔢 Ordinals</button>
     <button class="section-tab" data-section="months">📅 Months</button>
+    <button class="section-tab" data-section="clock">🕐 Time</button>
     <button class="section-tab" data-section="cases">🏠 Cases</button>
     <button class="section-tab" data-section="partitive">📐 Partitive</button>
     <button class="section-tab" data-section="akkusatiivi">🎯 Akkusatiivi</button>
@@ -235,6 +236,10 @@
   <div class="section" id="section-months">
     <div class="section-title">Months &amp; Seasons — <span>flip to see Finnish</span></div>
     <div class="grid" id="grid-months"></div>
+  </div>
+  <div class="section" id="section-clock">
+    <div class="section-title">Telling the Time — <span>flip to see how to say it in Finnish</span></div>
+    <div class="grid" id="grid-clock"></div>
   </div>
   <div class="section" id="section-cases">
     <div class="section-title">Finnish Cases — <span>flip to see ending + examples</span></div>
@@ -424,7 +429,13 @@ var words = [
   {fi:"monelta?",en:"at what time?",cat:"other",note:"Monelta bussi tulee?"},
   {fi:"montako?",en:"how many (exact)?",cat:"other",note:"Montako euroa? + partitive"},
   {fi:"kuinka?",en:"how? / how much?",cat:"other",note:"kuinka paljon, kuinka kauan"},
-  {fi:"takana",en:"behind / at the back",cat:"other",note:"talon takana = behind the house"}
+  {fi:"takana",en:"behind / at the back",cat:"other",note:"talon takana = behind the house"},
+  {fi:"suu",en:"mouth",cat:"nouns",note:"suun (gen.), suussa"},
+  {fi:"suudella",en:"to kiss",cat:"verbs",note:"suutele-n (Type 3)"},
+  {fi:"aamiainen",en:"breakfast",cat:"nouns",note:"aamiaise-n; syödä aamiaista"},
+  {fi:"lehti",en:"newspaper / leaf",cat:"nouns",note:"lehde-n (t→d)"},
+  {fi:"vielä",en:"still / yet",cat:"other",note:"vielä ei = not yet; vielä kerran = once more"},
+  {fi:"en milloinkan",en:"never",cat:"other",note:"En tee sitä milloinkan"}
 ];
 
 // ── KPT ──────────────────────────────────────────────
@@ -478,6 +489,111 @@ var ordinalCards = [
   {num:"50th",  fi:"viideskymmenes", cardinal:"viisikymmentä (50)", example:"viideskymmenes juhla"},
   {num:"100th", fi:"sadas",       cardinal:"sata (100)",         example:"sadas asiakas"}
 ];
+
+// ── CLOCK / TIME ──────────────────────────────────────────────
+var clockCards = [
+  {
+    sub:"exact hour",
+    front:"How to say exact hours\n3:00 / 7:00 / 12:00",
+    back:"kello + cardinal\n→ partitive form",
+    example:"Kello on kolme. (3:00)\nKello on seitsemän. (7:00)\nKello on kaksitoista. (12:00)"
+  },
+  {
+    sub:"asking time",
+    front:"What time is it?\nAt what time?",
+    back:"Mitä kello on?\nMonelta?",
+    example:"— Mitä kello on?\n— Kello on neljä. (4:00)\n\n— Monelta bussi lähtee?\n— Neljältä. (at 4)"
+  },
+  {
+    sub:"at + time",
+    front:"\"at\" a specific time\n→ what ending?",
+    back:"hour + -ltä / -lta\n(ablative of kello)",
+    example:"kahdelta (at 2)\nkolmelta (at 3)\nneljältä (at 4)\nkuudelta (at 6)"
+  },
+  {
+    sub:"half past",
+    front:"Half past = ?\n5:30 / 8:30",
+    back:"puoli + NEXT hour\n(not the current!)",
+    example:"puoli kuusi = 5:30\n(half towards six)\npuoli yhdeksän = 8:30\npuoli kaksi = 1:30"
+  },
+  {
+    sub:"quarter past",
+    front:"Quarter past = ?\n3:15 / 6:15",
+    back:"varttia yli + hour",
+    example:"varttia yli kolme = 3:15\nvarttia yli kuusi = 6:15\n\n'varttiä' = quarter (partitive)"
+  },
+  {
+    sub:"quarter to",
+    front:"Quarter to = ?\n3:45 / 6:45",
+    back:"varttia vaille + NEXT hour",
+    example:"varttia vaille neljä = 3:45\nvarttia vaille seitsemän = 6:45\n\n'vaille' = before/to"
+  },
+  {
+    sub:"minutes past",
+    front:"X minutes past the hour\n5:10 / 3:20",
+    back:"[min] minuuttia yli [hour]",
+    example:"kymmenen minuuttia yli viisi = 5:10\nkaksikymmentä minuuttia yli kolme = 3:20\n\n'yli' = over/past"
+  },
+  {
+    sub:"minutes to",
+    front:"X minutes to the hour\n5:50 / 3:40",
+    back:"[min] minuuttia vaille [next hour]",
+    example:"kymmenen minuuttia vaille kuusi = 5:50\nkaksikymmentä minuuttia vaille neljä = 3:40\n\n'vaille' = before/to"
+  },
+  {
+    sub:"past the half",
+    front:"Minutes after the half\n5:40 / 8:35",
+    back:"[min] yli puoli [next hour]",
+    example:"kymmenen yli puoli kuusi = 5:40\nviisi yli puoli yhdeksän = 8:35\n\n'yli puoli' = past the half"
+  },
+  {
+    sub:"before the half",
+    front:"Minutes before the half\n5:20 / 8:25",
+    back:"[min] vaille puoli [next hour]",
+    example:"kymmenen vaille puoli kuusi = 5:20\nviisi vaille puoli yhdeksän = 8:25\n\n'vaille puoli' = before the half"
+  },
+  {
+    sub:"key words",
+    front:"Key time words\nyli / vaille / puoli",
+    back:"yli = past / over\nvaille = to / before\npuoli = half\nvartti = quarter",
+    example:"yli → minutes AFTER\nvaille → minutes BEFORE\npuoli → counts toward NEXT hour\nvartti = 15 min"
+  },
+  {
+    sub:"digital style",
+    front:"Digital / 24h style\n14:30 / 9:05",
+    back:"kello + hours + minutes\n(just say the numbers)",
+    example:"Kello on neljätoista kolmekymmentä.\n(14:30)\nKello on yhdeksän nolla viisi.\n(9:05)"
+  }
+];
+
+function renderClock() {
+  var grid = document.getElementById('grid-clock');
+  grid.innerHTML = '';
+  var colors = {
+    'exact hour':'var(--accent)',
+    'asking time':'var(--accent3)',
+    'at + time':'var(--accent3)',
+    'half past':'var(--accent2)',
+    'quarter past':'var(--accent)',
+    'quarter to':'var(--accent)',
+    'minutes past':'var(--accent)',
+    'minutes to':'var(--accent)',
+    'past the half':'var(--accent2)',
+    'before the half':'var(--accent2)',
+    'key words':'var(--accent3)',
+    'digital style':'var(--muted)'
+  };
+  clockCards.forEach(function(c, i) {
+    var color = colors[c.sub] || 'var(--accent)';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div>'
+              + '<div class="g-main" style="font-size:1.0rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.05rem;color:' + color + '">' + c.back + '</div>'
+              + '<div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'clk_' + i);
+    card.style.animationDelay = i * 40 + 'ms';
+    grid.appendChild(card);
+  });
+}
 
 // ── MONTHS & SEASONS ──────────────────────────────────────────────
 var monthCards = [
@@ -819,6 +935,7 @@ document.getElementById('sectionTabs').addEventListener('click', function(e) {
     pronouns: renderPronouns,
     ordinals: renderOrdinals,
     months: renderMonths,
+    clock: renderClock,
     cases: renderCases,
     partitive: renderPartitive,
     akkusatiivi: renderAkkusatiivi,
@@ -848,6 +965,7 @@ document.getElementById('shuffleBtn').addEventListener('click', function() {
     pronouns: function() { pronounCards = shuffle(pronounCards); renderPronouns(); },
     ordinals: function() { ordinalCards = shuffle(ordinalCards); renderOrdinals(); },
     months: function() { monthCards = shuffle(monthCards); renderMonths(); },
+    clock: function() { clockCards = shuffle(clockCards); renderClock(); },
     cases: function() { caseCards = shuffle(caseCards); renderCases(); },
     partitive: function() { partitiveCards = shuffle(partitiveCards); renderPartitive(); },
     akkusatiivi: function() { akkCards = shuffle(akkCards); renderAkkusatiivi(); },
