@@ -194,6 +194,7 @@
     <button class="section-tab" data-section="partitive">📐 Partitive</button>
     <button class="section-tab" data-section="akkusatiivi">🎯 Akkusatiivi</button>
     <button class="section-tab" data-section="genitive">🔗 Genitive</button>
+    <button class="section-tab" data-section="possessive">🤝 Possessive</button>
     <button class="section-tab" data-section="postpos">📍 Postpositions</button>
     <button class="section-tab" data-section="words">📖 Words</button>
   </div>
@@ -256,6 +257,10 @@
   <div class="section" id="section-genitive">
     <div class="section-title">Genitive &amp; Obligation — <span>flip to see rule + example</span></div>
     <div class="grid" id="grid-genitive"></div>
+  </div>
+  <div class="section" id="section-possessive">
+    <div class="section-title">Possessive Suffixes — <span>flip to see suffix + example</span></div>
+    <div class="grid" id="grid-possessive"></div>
   </div>
   <div class="section" id="section-postpos">
     <div class="section-title">Postpositions — <span>Gen. + postposition. Flip for meaning + example</span></div>
@@ -648,6 +653,81 @@ var akkCards = [
   {sub:"negation",front:"After negation → what case?",        back:"Partitive (never acc.)", example:"En osta taloa.\nEn lue kirjaa."}
 ];
 
+// ── POSSESSIVE SUFFIXES ──────────────────────────────────────────────
+var possessiveCards = [
+  {
+    sub:"1st sg — minun",
+    front:"my\nminun + noun + suffix",
+    back:"-ni",
+    example:"kirja → kirjani (my book)\nauto → autoni (my car)\nkoti → kotini (my home)"
+  },
+  {
+    sub:"2nd sg — sinun",
+    front:"your\nsinun + noun + suffix",
+    back:"-si",
+    example:"kirja → kirjasi (your book)\nauto → autosi (your car)\nkoti → kotisi (your home)"
+  },
+  {
+    sub:"3rd sg — hänen",
+    front:"his / her\nhänen + noun + suffix",
+    back:"-nsa / -nsä\nor -an / -ään",
+    example:"kirja → kirjansa (his/her book)\nauto → autonsa (his/her car)\nkäsi → kätensä (his/her hand)"
+  },
+  {
+    sub:"1st pl — meidän",
+    front:"our\nmeidän + noun + suffix",
+    back:"-mme",
+    example:"kirja → kirjamme (our book)\nauto → automme (our car)\nkoti → kotimme (our home)"
+  },
+  {
+    sub:"2nd pl — teidän",
+    front:"your (plural)\nteidän + noun + suffix",
+    back:"-nne",
+    example:"kirja → kirjanne (your book)\nauto → autonne (your car)\nkoti → kotinne (your home)"
+  },
+  {
+    sub:"3rd pl — heidän",
+    front:"their\nheidän + noun + suffix",
+    back:"-nsa / -nsä\n(same as 3rd sg!)",
+    example:"kirja → kirjansa (their book)\nauto → autonsa (their car)\n⚠ same form as hänen"
+  },
+  {
+    sub:"genitive drops -n",
+    front:"Genitive -n disappears\nbefore possessive suffix",
+    back:"minun kirja-ni\n(not kirjan-ni)",
+    example:"talon → talo-ni (my house)\nkodin → koti-ni (my home)\nauton → auto-ni (my car)"
+  },
+  {
+    sub:"with cases",
+    front:"Suffix goes on the\ncased form of the noun",
+    back:"case ending + suffix",
+    example:"kotona → kotonani (at my home)\nkoulussa → koulussamme (at our school)\nautolla → autollasi (in your car)"
+  },
+  {
+    sub:"spoken Finnish",
+    front:"Spoken Finnish:\ngenitive pronoun often dropped",
+    back:"suffix alone is enough",
+    example:"(minun) kirjani — mun kirja\n(sinun) autosi — sun auto\n(meidän) kotimme — meidän koti"
+  }
+];
+
+function renderPossessive() {
+  var grid = document.getElementById('grid-possessive');
+  grid.innerHTML = '';
+  possessiveCards.forEach(function(c, i) {
+    var isSuffix = i < 6;
+    var color = isSuffix ? 'var(--accent)' : 'var(--accent2)';
+    if (i === 5) color = 'var(--accent3)'; // 3rd pl warning
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div>'
+              + '<div class="g-main" style="font-size:1.05rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.5rem;color:' + color + '">' + c.back + '</div>'
+              + '<div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'pos_' + i);
+    card.style.animationDelay = i * 45 + 'ms';
+    grid.appendChild(card);
+  });
+}
+
 // ── GENITIVE ──────────────────────────────────────────────
 var genitiveCards = [
   {sub:"formation", front:"Genitive ending",               back:"-n",                    example:"talo → talon\nauto → auton\nnimi → nimen"},
@@ -940,6 +1020,7 @@ document.getElementById('sectionTabs').addEventListener('click', function(e) {
     partitive: renderPartitive,
     akkusatiivi: renderAkkusatiivi,
     genitive: renderGenitive,
+    possessive: renderPossessive,
     postpos: renderPostpos,
     questions: renderQuestions,
     words: renderWords
@@ -970,6 +1051,7 @@ document.getElementById('shuffleBtn').addEventListener('click', function() {
     partitive: function() { partitiveCards = shuffle(partitiveCards); renderPartitive(); },
     akkusatiivi: function() { akkCards = shuffle(akkCards); renderAkkusatiivi(); },
     genitive: function() { genitiveCards = shuffle(genitiveCards); renderGenitive(); },
+    possessive: function() { possessiveCards = shuffle(possessiveCards); renderPossessive(); },
     postpos: function() { postposCards = shuffle(postposCards); renderPostpos(); },
     questions: function() { questionCards = shuffle(questionCards); renderQuestions(); }
   };
