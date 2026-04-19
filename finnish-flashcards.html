@@ -196,6 +196,8 @@
     <button class="section-tab" data-section="genitive">🔗 Genitive</button>
     <button class="section-tab" data-section="possessive">🤝 Possessive</button>
     <button class="section-tab" data-section="postpos">📍 Postpositions</button>
+    <button class="section-tab" data-section="conditional">🔮 Conditional</button>
+    <button class="section-tab" data-section="phrases">💬 Phrases</button>
     <button class="section-tab" data-section="words">📖 Words</button>
   </div>
   <div class="filter-row" id="wordFilters" style="display:none">
@@ -269,6 +271,14 @@
   <div class="section" id="section-questions">
     <div class="section-title">Question Words — <span>flip to see Finnish + all case forms</span></div>
     <div class="grid" id="grid-questions"></div>
+  </div>
+  <div class="section" id="section-conditional">
+    <div class="section-title">Conditional (Konditionaali) — <span>would / could / should. Flip for form + example</span></div>
+    <div class="grid" id="grid-conditional"></div>
+  </div>
+  <div class="section" id="section-phrases">
+    <div class="section-title">Common Phrases — <span>flip to see Finnish translation</span></div>
+    <div class="grid" id="grid-phrases"></div>
   </div>
   <div class="section" id="section-words">
     <div class="grid" id="grid"></div>
@@ -440,7 +450,393 @@ var words = [
   {fi:"aamiainen",en:"breakfast",cat:"nouns",note:"aamiaise-n; syödä aamiaista"},
   {fi:"lehti",en:"newspaper / leaf",cat:"nouns",note:"lehde-n (t→d)"},
   {fi:"vielä",en:"still / yet",cat:"other",note:"vielä ei = not yet; vielä kerran = once more"},
-  {fi:"en milloinkan",en:"never",cat:"other",note:"En tee sitä milloinkan"}
+  {fi:"en milloinkan",en:"never",cat:"other",note:"En tee sitä milloinkan"},
+  // ── transport ──
+  {fi:"taksi",en:"taxi",cat:"nouns",note:"taksi-ssa"},
+  {fi:"bussi",en:"bus",cat:"nouns",note:"bussi-ssa; bussilla"},
+  {fi:"laiva",en:"ship",cat:"nouns",note:"laiva-ssa"},
+  {fi:"vene",en:"boat",cat:"nouns",note:"venee-n"},
+  {fi:"raitiovaunu",en:"tram",cat:"nouns",note:"spoken: ratikka / spora"},
+  {fi:"metro",en:"metro",cat:"nouns",note:"metro-ssa"},
+  {fi:"lentokone",en:"aeroplane",cat:"nouns",note:"lentokone-essa"},
+  {fi:"polkupyörä",en:"bicycle",cat:"nouns",note:"pyörä-llä (by bike)"},
+  {fi:"hissi",en:"elevator / lift",cat:"nouns",note:"hissi-ssä"},
+  {fi:"moottoripyörä",en:"motorbike",cat:"nouns",note:"moottoripyörä-llä"},
+  {fi:"sähköpyörä",en:"electric bike",cat:"nouns",note:"sähköpyörä-llä"},
+  {fi:"potkulauta",en:"scooter",cat:"nouns",note:"spoken: skuutti"},
+  {fi:"skeittilautа",en:"skateboard",cat:"nouns",note:"skeittilaudalla"},
+  // ── body / appearance ──
+  {fi:"parta",en:"beard",cat:"nouns",note:"parta-a (partitive)"},
+  {fi:"viikset",en:"mustache",cat:"nouns",note:"plural"},
+  {fi:"silmä",en:"eye",cat:"nouns",note:"silmät (plural)"},
+  {fi:"hammas",en:"tooth",cat:"nouns",note:"hampaat (plural); hampaa-n"},
+  {fi:"poski",en:"cheek",cat:"nouns",note:"posket (plural)"},
+  {fi:"hiukset",en:"hair (head)",cat:"nouns",note:"also: tukka"},
+  {fi:"hoikka",en:"slim",cat:"adj",note:"kk→k: hoika-n"},
+  {fi:"tukeva",en:"overweight / sturdy",cat:"adj",note:"tukeva-a"},
+  {fi:"kihara",en:"curly",cat:"adj",note:"kiharat hiukset"},
+  {fi:"suora",en:"straight",cat:"adj",note:"suorat hiukset; suoraan = straight ahead"},
+  // ── clothing ──
+  {fi:"paita",en:"shirt",cat:"nouns",note:"paita-a; t-paita = T-shirt"},
+  {fi:"housut",en:"trousers",cat:"nouns",note:"always plural"},
+  {fi:"sukka",en:"sock",cat:"nouns",note:"sukat (plural); kk→k"},
+  {fi:"farkut",en:"jeans",cat:"nouns",note:"always plural"},
+  {fi:"kenkä",en:"shoe",cat:"nouns",note:"kengät (plural); nk→ng"},
+  {fi:"takki",en:"jacket",cat:"nouns",note:"kk→k: taki-ssa"},
+  {fi:"hattu",en:"hat",cat:"nouns",note:"tt→t: hatu-ssa"},
+  {fi:"pipo",en:"beanie",cat:"nouns",note:"pipo-ssa"},
+  {fi:"silmälasit",en:"glasses",cat:"nouns",note:"spoken: rillit"},
+  // ── family ──
+  {fi:"äiti",en:"mother",cat:"nouns",note:"äidin (gen.)"},
+  {fi:"isä",en:"father",cat:"nouns",note:"spoken: isi / iskä"},
+  {fi:"sisko",en:"sister",cat:"nouns",note:"siskot (plural)"},
+  {fi:"veli",en:"brother",cat:"nouns",note:"veljen (gen.); veljet (plural)"},
+  {fi:"tytär",en:"daughter",cat:"nouns",note:"tyttäret (plural)"},
+  {fi:"serkku",en:"cousin",cat:"nouns",note:"serkku-a"},
+  {fi:"isoäiti",en:"grandmother",cat:"nouns",note:"spoken: mummu / mummo"},
+  {fi:"isoisä",en:"grandfather",cat:"nouns",note:"spoken: pappa / ukki"},
+  {fi:"lapsenlapsi",en:"grandchild",cat:"nouns",note:"lapsenlapset (plural)"},
+  // ── colours ──
+  {fi:"valkoinen",en:"white",cat:"adj",note:"valkoisen (gen.)"},
+  {fi:"keltainen",en:"yellow",cat:"adj",note:"keltaisen (gen.)"},
+  {fi:"punainen",en:"red",cat:"adj",note:"punaisen (gen.)"},
+  {fi:"sininen",en:"blue",cat:"adj",note:"sinisen (gen.)"},
+  {fi:"vihreä",en:"green",cat:"adj",note:"vihreä-n"},
+  {fi:"ruskea",en:"brown",cat:"adj",note:"ruskea-n"},
+  {fi:"harmaa",en:"grey",cat:"adj",note:"harmaa-n"},
+  {fi:"violetti",en:"violet / purple",cat:"adj",note:"violetin (gen.)"},
+  {fi:"oranssi",en:"orange (colour)",cat:"adj",note:"oranssi-a"},
+  {fi:"vaaleanpunainen",en:"pink",cat:"adj",note:"spoken: pinkki"},
+  {fi:"tumma",en:"dark (colour)",cat:"adj",note:"tumma-a"},
+  {fi:"värikäs",en:"colourful",cat:"adj",note:"värikkään (gen.)"},
+  // ── shopping ──
+  {fi:"ostoskeskus",en:"shopping mall",cat:"nouns",note:"spoken: ostari"},
+  {fi:"kioski",en:"kiosk",cat:"nouns",note:"spoken: kiska"},
+  {fi:"kassa",en:"cashier / register",cat:"nouns",note:"kassa-lla"},
+  {fi:"myyjä",en:"seller / salesperson",cat:"nouns",note:"myyjä-n"},
+  {fi:"ale",en:"sale / discount",cat:"nouns",note:"also: alennus"},
+  {fi:"ilmainen",en:"free of charge",cat:"adj",note:"spoken: ilmane"},
+  {fi:"vakuutus",en:"insurance",cat:"nouns",note:"vakuutukse-n"},
+  {fi:"takuu",en:"guarantee",cat:"nouns",note:"takuu-n"},
+  {fi:"käteinen",en:"cash (money)",cat:"nouns",note:"käteise-n"},
+  {fi:"kortti",en:"card",cat:"nouns",note:"kortti-a; pankkikortti, luottokortti"},
+  {fi:"kolikko",en:"coin",cat:"nouns",note:"kk→k: koliko-n"},
+  {fi:"seteli",en:"banknote",cat:"nouns",note:"seteli-n"},
+  {fi:"lippu",en:"ticket",cat:"nouns",note:"pp→p: lipu-n"},
+  {fi:"jäsen",en:"member",cat:"nouns",note:"jäsene-n"},
+  // ── documents ──
+  {fi:"henkilökortti",en:"personal ID card",cat:"nouns",note:"spoken: henkkarit"},
+  {fi:"ajokortti",en:"driving licence",cat:"nouns",note:"ajokortti-a"},
+  {fi:"passi",en:"passport",cat:"nouns",note:"passi-a"},
+  {fi:"oleskelulupa",en:"residence permit",cat:"nouns",note:"oleskelulupa-a"},
+  {fi:"osoite",en:"address",cat:"nouns",note:"osoittee-n"},
+  {fi:"sähköposti",en:"e-mail",cat:"nouns",note:"spoken: meili"},
+  // ── places ──
+  {fi:"kylä",en:"village",cat:"nouns",note:"kylä-ssä"},
+  {fi:"keskusta",en:"centrum / downtown",cat:"nouns",note:"keskusta-ssa"},
+  {fi:"maaseutu",en:"countryside",cat:"nouns",note:"maaseudulla = in the countryside"},
+  // ── new verbs VT1 ──
+  {fi:"ajaa",en:"to drive",cat:"verbs",note:"VT1 KPT; aja-n"},
+  {fi:"aikoa",en:"to intend",cat:"verbs",note:"VT1 KPT; aio-n"},
+  {fi:"alkaa",en:"to start / begin",cat:"verbs",note:"VT1 KPT; ala-n"},
+  {fi:"ehtiä",en:"to have time to",cat:"verbs",note:"VT1 KPT; ehdi-n"},
+  {fi:"etsiä",en:"to look for / search",cat:"verbs",note:"VT1; etsi-n"},
+  {fi:"hakea",en:"to pick up / fetch",cat:"verbs",note:"VT1 KPT; hae-n"},
+  {fi:"herättää",en:"to wake someone up",cat:"verbs",note:"VT1 KPT; herätä-n"},
+  {fi:"hoitaa",en:"to take care of",cat:"verbs",note:"VT1 KPT; hoida-n"},
+  {fi:"huutaa",en:"to shout",cat:"verbs",note:"VT1 KPT; huuda-n"},
+  {fi:"kieltää",en:"to deny / forbid",cat:"verbs",note:"VT1 KPT; kiellä-n"},
+  {fi:"laskea",en:"to count / lower",cat:"verbs",note:"VT1; laske-n"},
+  {fi:"laittaa",en:"to put / prepare",cat:"verbs",note:"VT1 KPT; laita-n"},
+  {fi:"maksaa",en:"to pay / to cost",cat:"verbs",note:"VT1; maksa-n"},
+  {fi:"odottaa",en:"to wait / expect",cat:"verbs",note:"VT1 KPT; odota-n"},
+  {fi:"sallia",en:"to allow",cat:"verbs",note:"VT1; salli-n"},
+  {fi:"soittaa",en:"to call / play (instrument)",cat:"verbs",note:"VT1 KPT; soita-n"},
+  {fi:"tuntea",en:"to feel / to know (person)",cat:"verbs",note:"VT1 KPT; tunne-n"},
+  {fi:"palauttaa",en:"to return (something)",cat:"verbs",note:"VT1 KPT; palauta-n"},
+  {fi:"matkustaa",en:"to travel",cat:"verbs",note:"VT1; matkusta-n"},
+  // ── new verbs VT2 ──
+  {fi:"imuroida",en:"to vacuum",cat:"verbs",note:"VT2; imuroi-n"},
+  {fi:"jäädä",en:"to stay / remain",cat:"verbs",note:"VT2; jää-n"},
+  {fi:"nähdä",en:"to see",cat:"verbs",note:"VT2 KPT; näe-n"},
+  {fi:"pysäköidä",en:"to park",cat:"verbs",note:"VT2; pysäköi-n"},
+  {fi:"soida",en:"to ring / sound",cat:"verbs",note:"VT2; soi-n"},
+  {fi:"tuoda",en:"to bring",cat:"verbs",note:"VT2; tuo-n"},
+  {fi:"tupakoida",en:"to smoke",cat:"verbs",note:"VT2; tupakoi-n"},
+  {fi:"uida",en:"to swim",cat:"verbs",note:"VT2; ui-n"},
+  // ── new verbs VT3 ──
+  {fi:"ajatella",en:"to think",cat:"verbs",note:"VT3 KPT; ajattele-n"},
+  {fi:"hymyillä",en:"to smile",cat:"verbs",note:"VT3; hymyile-n"},
+  {fi:"juosta",en:"to run",cat:"verbs",note:"VT3 KPT; juokse-n"},
+  {fi:"jutella",en:"to chat",cat:"verbs",note:"VT3 KPT; juttele-n"},
+  {fi:"keskustella",en:"to discuss",cat:"verbs",note:"VT3; keskustele-n"},
+  {fi:"kuulla",en:"to hear",cat:"verbs",note:"VT3; kuule-n"},
+  {fi:"kävellä",en:"to walk",cat:"verbs",note:"VT3; kävele-n"},
+  {fi:"opetella",en:"to learn (practice)",cat:"verbs",note:"VT3 KPT; opettele-n"},
+  {fi:"opiskella",en:"to study",cat:"verbs",note:"VT3; opiskele-n"},
+  {fi:"panna",en:"to put / place",cat:"verbs",note:"VT3; pane-n"},
+  {fi:"pestä",en:"to wash",cat:"verbs",note:"VT3; pese-n"},
+  {fi:"purra",en:"to bite",cat:"verbs",note:"VT3; pure-n"},
+  {fi:"pyöräillä",en:"to cycle / ride a bike",cat:"verbs",note:"VT3; pyöräile-n"},
+  {fi:"tapella",en:"to fight",cat:"verbs",note:"VT3 KPT; tappele-n"},
+  {fi:"työskennellä",en:"to work",cat:"verbs",note:"VT3 KPT; työskentele-n"},
+  // ── new verbs VT4 ──
+  {fi:"avata",en:"to open",cat:"verbs",note:"VT4; avaa-n"},
+  {fi:"erota",en:"to divorce / separate",cat:"verbs",note:"VT4; eroa-n"},
+  {fi:"herätä",en:"to wake up",cat:"verbs",note:"VT4; herää-n"},
+  {fi:"huomata",en:"to notice",cat:"verbs",note:"VT4; huomaa-n"},
+  {fi:"kadota",en:"to disappear",cat:"verbs",note:"VT4; katoa-n"},
+  {fi:"lakata",en:"to stop happening",cat:"verbs",note:"VT4; lakkaa-n"},
+  {fi:"luvata",en:"to promise",cat:"verbs",note:"VT4; lupaa-n"},
+  {fi:"maata",en:"to lie down",cat:"verbs",note:"VT4; makaa-n"},
+  {fi:"pelata",en:"to play (a game)",cat:"verbs",note:"VT4; pelaa-n"},
+  {fi:"pelätä",en:"to be scared / afraid",cat:"verbs",note:"VT4; pelkää-n"},
+  {fi:"pudota",en:"to fall / drop",cat:"verbs",note:"VT4; putoa-n"},
+  {fi:"siivota",en:"to clean",cat:"verbs",note:"VT4; siivoa-n"},
+  {fi:"tavata",en:"to meet",cat:"verbs",note:"VT4; tapaa-n"},
+  {fi:"tilata",en:"to order",cat:"verbs",note:"VT4; tilaa-n"},
+  {fi:"tykätä",en:"to like",cat:"verbs",note:"VT4; tykkää-n"},
+  {fi:"vastata",en:"to answer",cat:"verbs",note:"VT4; vastaa-n"},
+  // ── new verbs VT5 ──
+  {fi:"hallita",en:"to rule / master",cat:"verbs",note:"VT5; hallitse-n"},
+  {fi:"havaita",en:"to perceive / notice",cat:"verbs",note:"VT5; havaitse-n"},
+  {fi:"häiritä",en:"to disturb",cat:"verbs",note:"VT5; häiritse-n"},
+  {fi:"mainita",en:"to mention",cat:"verbs",note:"VT5; mainitsen"},
+  {fi:"merkitä",en:"to mark / mean",cat:"verbs",note:"VT5; merkitse-n"},
+  {fi:"palkita",en:"to reward",cat:"verbs",note:"VT5; palkitse-n"},
+  {fi:"tulkita",en:"to interpret",cat:"verbs",note:"VT5; tulkitse-n"},
+  {fi:"valita",en:"to choose",cat:"verbs",note:"VT5; valitse-n"},
+  // ── new verbs VT6 ──
+  {fi:"aueta",en:"to open (intr.)",cat:"verbs",note:"VT6; aukene-n"},
+  {fi:"heiketä",en:"to weaken",cat:"verbs",note:"VT6 KPT; heikkene-n"},
+  {fi:"kyetä",en:"to be able to",cat:"verbs",note:"VT6 KPT; kykene-n"},
+  {fi:"kuumeta",en:"to become hot",cat:"verbs",note:"VT6; kuumene-n"},
+  {fi:"kylmetä",en:"to get colder",cat:"verbs",note:"VT6; kylmene-n"},
+  {fi:"lyhetä",en:"to become shorter",cat:"verbs",note:"VT6; lyhene-n"},
+  {fi:"paeta",en:"to escape",cat:"verbs",note:"VT6 KPT; pakene-n"},
+  {fi:"vanheta",en:"to grow old",cat:"verbs",note:"VT6; vanhene-n"},
+  {fi:"vaietа",en:"to become silent",cat:"verbs",note:"VT6 KPT; vaikene-n"},
+  // ── misc new ──
+  {fi:"kielletty",en:"prohibited / forbidden",cat:"adj",note:"tupakointi kielletty"},
+  {fi:"sallittu",en:"allowed / permitted",cat:"adj",note:"musiikin soittaminen sallittu"},
+  {fi:"kello",en:"clock / watch",cat:"nouns",note:"rannekello = wristwatch"},
+  {fi:"tunti",en:"hour",cat:"nouns",note:"tunni-n (gen.)"},
+  {fi:"minuutti",en:"minute",cat:"nouns",note:"minuutti-a"},
+  {fi:"sekunti",en:"second (time)",cat:"nouns",note:"sekunti-a"},
+  {fi:"aamupäivä",en:"forenoon / AM",cat:"nouns",note:"aamupäivällä = in the forenoon"},
+  {fi:"iltapäivä",en:"afternoon / PM",cat:"nouns",note:"iltapäivällä = in the afternoon"},
+  {fi:"syntymäpäivä",en:"birthday",cat:"nouns",note:"syntymäpäivä-ni = my birthday"},
+  // ── home / living ──
+  {fi:"omakotitalo",en:"detached house",cat:"nouns",note:"omakotitalo-ssa"},
+  {fi:"rivitalo",en:"row house",cat:"nouns",note:"rivitalo-ssa"},
+  {fi:"kerrostalo",en:"block of flats",cat:"nouns",note:"kerrostalo-ssa"},
+  {fi:"piha",en:"courtyard / yard",cat:"nouns",note:"piha-lla"},
+  {fi:"aita",en:"fence",cat:"nouns",note:"aita-a"},
+  {fi:"nurmikko",en:"lawn",cat:"nouns",note:"kk→k: nurmiko-lla"},
+  {fi:"kasvi",en:"plant",cat:"nouns",note:"kasvi-a"},
+  {fi:"katto",en:"roof",cat:"nouns",note:"tt→t: kato-lla"},
+  {fi:"seinä",en:"wall",cat:"nouns",note:"seinä-ssä"},
+  {fi:"ikkuna",en:"window",cat:"nouns",note:"ikkuna-ssa"},
+  {fi:"naapuri",en:"neighbour",cat:"nouns",note:"naapuri-n"},
+  {fi:"ovi",en:"door",cat:"nouns",note:"ove-n"},
+  // ── furniture / appliances ──
+  {fi:"huonekalu",en:"piece of furniture",cat:"nouns",note:"huonekalu-ja"},
+  {fi:"kodinkone",en:"household appliance",cat:"nouns",note:"kodinkone-en"},
+  {fi:"sohva",en:"sofa",cat:"nouns",note:"sohva-lla"},
+  {fi:"tuoli",en:"chair",cat:"nouns",note:"tuoli-lla"},
+  {fi:"nojatuoli",en:"armchair",cat:"nouns",note:"nojatuoli-ssa"},
+  {fi:"penkki",en:"bench",cat:"nouns",note:"nk→ng: penki-llä"},
+  {fi:"pöytä",en:"table",cat:"nouns",note:"pöydä-llä (t→d)"},
+  {fi:"kaappi",en:"closet / cupboard",cat:"nouns",note:"pp→p: kaapi-ssa"},
+  {fi:"hylly",en:"shelf",cat:"nouns",note:"hylly-llä"},
+  {fi:"matto",en:"carpet / rug",cat:"nouns",note:"tt→t: mato-lla"},
+  {fi:"verho",en:"curtain",cat:"nouns",note:"verho-ssa"},
+  {fi:"jääkaappi",en:"refrigerator",cat:"nouns",note:"pp→p: jääkaapi-ssa"},
+  {fi:"pakastin",en:"freezer",cat:"nouns",note:"pakastime-n"},
+  {fi:"mikroaaltouuni",en:"microwave",cat:"nouns",note:"spoken: mikro"},
+  {fi:"uuni",en:"oven",cat:"nouns",note:"uuni-ssa"},
+  {fi:"imuri",en:"vacuum cleaner",cat:"nouns",note:"imuri-lla; imuroida = to vacuum"},
+  {fi:"pesukone",en:"washing machine",cat:"nouns",note:"pesukone-essa"},
+  {fi:"televisio",en:"television",cat:"nouns",note:"spoken: telkkari / TV"},
+  {fi:"kannettava",en:"laptop",cat:"nouns",note:"spoken: läppäri"},
+  {fi:"näyttö",en:"screen / display",cat:"nouns",note:"also: ruutu"},
+  {fi:"hiiri",en:"mouse (computer)",cat:"nouns",note:"hiire-n"},
+  {fi:"tulostin",en:"printer",cat:"nouns",note:"spoken: printteri"},
+  {fi:"kännykkä",en:"mobile phone",cat:"nouns",note:"also: puhelin, luuri"},
+  {fi:"kuulokkeet",en:"headphones",cat:"nouns",note:"kuulokkei-den"},
+  {fi:"pelikonsoli",en:"gaming console",cat:"nouns",note:"pelikonsoli-a"},
+  {fi:"kaukosäädin",en:"remote control",cat:"nouns",note:"spoken: kaukkari"},
+  {fi:"kaiutin",en:"speaker",cat:"nouns",note:"spoken: kajari"},
+  {fi:"johto",en:"cable / cord",cat:"nouns",note:"johdo-n; also: kaapeli"},
+  {fi:"pistorasia",en:"power socket",cat:"nouns",note:"pistorasia-ssa"},
+  {fi:"nappula",en:"button",cat:"nouns",note:"also: painike"},
+  // ── body parts ──
+  {fi:"kasvot",en:"face",cat:"nouns",note:"also spoken: naama"},
+  {fi:"korva",en:"ear",cat:"nouns",note:"korva-ssa"},
+  {fi:"nenä",en:"nose",cat:"nouns",note:"nenä-ssä"},
+  {fi:"otsa",en:"forehead",cat:"nouns",note:"otsa-lla"},
+  {fi:"kulmakarva",en:"eyebrow",cat:"nouns",note:"kulmakarva-t (plural)"},
+  {fi:"huulet",en:"lips",cat:"nouns",note:"huulte-n (gen.)"},
+  {fi:"sormi",en:"finger",cat:"nouns",note:"sorme-n"},
+  {fi:"peukalo",en:"thumb",cat:"nouns",note:"spoken: peukku"},
+  {fi:"kynsi",en:"nail (finger)",cat:"nouns",note:"kynnet (plural)"},
+  {fi:"kämmen",en:"palm (of hand)",cat:"nouns",note:"kämmene-n"},
+  {fi:"jalka",en:"foot / leg",cat:"nouns",note:"jala-n (k→0)"},
+  {fi:"polvi",en:"knee",cat:"nouns",note:"polve-n"},
+  {fi:"nilkka",en:"ankle",cat:"nouns",note:"kk→k: nilka-ssa"},
+  {fi:"varvas",en:"toe",cat:"nouns",note:"varpaat (plural)"},
+  {fi:"selkä",en:"back (body)",cat:"nouns",note:"selä-n (k→0)"},
+  {fi:"vatsa",en:"belly / stomach",cat:"nouns",note:"also: maha"},
+  {fi:"pää",en:"head",cat:"nouns",note:"pää-ssä"},
+  {fi:"luu",en:"bone",cat:"nouns",note:"luu-n"},
+  {fi:"lihas",en:"muscle",cat:"nouns",note:"lihakse-n"},
+  {fi:"sydän",en:"heart",cat:"nouns",note:"sydäme-n"},
+  {fi:"keuhkot",en:"lungs",cat:"nouns",note:"keuhkoje-n"},
+  {fi:"maksa",en:"liver",cat:"nouns",note:"maksa-n"},
+  // ── health ──
+  {fi:"terveys",en:"health",cat:"nouns",note:"terveyden (gen.)"},
+  {fi:"sairaus",en:"sickness / illness",cat:"nouns",note:"sairaude-n"},
+  {fi:"sairaala",en:"hospital",cat:"nouns",note:"sairaala-ssa"},
+  {fi:"lääkäri",en:"doctor",cat:"nouns",note:"lääkäri-n"},
+  {fi:"hammaslääkäri",en:"dentist",cat:"nouns",note:"hammaslääkäri-n"},
+  {fi:"sairaanhoitaja",en:"nurse",cat:"nouns",note:"sairaanhoitaja-n"},
+  {fi:"kipu",en:"pain",cat:"nouns",note:"also: särky"},
+  {fi:"yskä",en:"cough",cat:"nouns",note:"yskä-ä"},
+  {fi:"nuha",en:"cold / runny nose",cat:"nouns",note:"nuha-a"},
+  {fi:"murtuma",en:"fracture",cat:"nouns",note:"murtuma-n"},
+  {fi:"palovamma",en:"burn (injury)",cat:"nouns",note:"palovamma-n"},
+  // ── food / kitchen ──
+  {fi:"kasvis",en:"vegetable",cat:"nouns",note:"kasvikse-n"},
+  {fi:"salaatti",en:"salad",cat:"nouns",note:"salaatti-a"},
+  {fi:"keitto",en:"soup",cat:"nouns",note:"tt→t: keito-ssa"},
+  {fi:"kana",en:"chicken",cat:"nouns",note:"also: broileri"},
+  {fi:"kala",en:"fish",cat:"nouns",note:"kala-a"},
+  {fi:"riisi",en:"rice",cat:"nouns",note:"riisi-ä"},
+  {fi:"pasta",en:"pasta",cat:"nouns",note:"pasta-a"},
+  {fi:"peruna",en:"potato",cat:"nouns",note:"peruna-a"},
+  {fi:"haarukka",en:"fork",cat:"nouns",note:"kk→k: haaruka-lla"},
+  {fi:"lusikka",en:"spoon",cat:"nouns",note:"kk→k: lusika-lla"},
+  {fi:"veitsi",en:"knife",cat:"nouns",note:"veitse-n"},
+  {fi:"juoma",en:"drink / beverage",cat:"nouns",note:"juoma-a"},
+  {fi:"mehu",en:"juice",cat:"nouns",note:"mehu-a"},
+  {fi:"tee",en:"tea",cat:"nouns",note:"tee-tä"},
+  {fi:"olut",en:"beer",cat:"nouns",note:"olue-n"},
+  {fi:"viini",en:"wine",cat:"nouns",note:"viini-ä"},
+  {fi:"pullo",en:"bottle",cat:"nouns",note:"pullo-a"},
+  {fi:"tölkki",en:"can (drink)",cat:"nouns",note:"kk→k: tölki-ssä"},
+  {fi:"lasi",en:"glass",cat:"nouns",note:"lasi-n"},
+  {fi:"kuppi",en:"cup",cat:"nouns",note:"pp→p: kupi-ssa"},
+  {fi:"muki",en:"mug",cat:"nouns",note:"muki-a"},
+  {fi:"nälkä",en:"hunger",cat:"nouns",note:"Minulla on nälkä = I'm hungry"},
+  {fi:"jano",en:"thirst",cat:"nouns",note:"Minulla on jano = I'm thirsty"},
+  // ── cooking verbs ──
+  {fi:"kiehua",en:"to boil (intr.)",cat:"verbs",note:"VT1; kiehuu = it boils"},
+  {fi:"keittää",en:"to brew / cook (liquids)",cat:"verbs",note:"VT1 KPT; keitä-n"},
+  {fi:"paistaa",en:"to fry / roast",cat:"verbs",note:"VT1; paista-n"},
+  {fi:"tiskata",en:"to do the dishes",cat:"verbs",note:"VT4; tiskaa-n"},
+  {fi:"jäähtyä",en:"to cool down",cat:"verbs",note:"VT1; jäähtyy"},
+  {fi:"lämmetä",en:"to get warm",cat:"verbs",note:"VT6; lämpene-n"},
+  {fi:"jäätyä",en:"to freeze",cat:"verbs",note:"VT1; jäätyy"},
+  {fi:"kuivua",en:"to dry",cat:"verbs",note:"VT1; kuivuu"},
+  {fi:"kastua",en:"to get wet",cat:"verbs",note:"VT1; kastuu"},
+  {fi:"sekoittaa",en:"to mix",cat:"verbs",note:"VT1 KPT; sekoita-n"},
+  {fi:"lisätä",en:"to add",cat:"verbs",note:"VT4; lisää-n"},
+  {fi:"lihota",en:"to gain weight",cat:"verbs",note:"VT4; liho-n"},
+  {fi:"laihtua",en:"to lose weight",cat:"verbs",note:"VT1; laihdu-n"},
+  {fi:"kokata",en:"to cook",cat:"verbs",note:"VT4; kokkaa-n"},
+  // ── travel ──
+  {fi:"reissata",en:"to travel (casual)",cat:"verbs",note:"VT4; reissaa-n"},
+  {fi:"kulkea",en:"to move / go (forward)",cat:"verbs",note:"VT1 KPT; kulje-n"},
+  {fi:"lentää",en:"to fly",cat:"verbs",note:"VT1; lennä-n"},
+  {fi:"saapua",en:"to arrive",cat:"verbs",note:"VT1; saavu-n"},
+  {fi:"vaihtaa",en:"to change / transfer",cat:"verbs",note:"VT1 KPT; vaihda-n"},
+  {fi:"asema",en:"station",cat:"nouns",note:"asema-lla"},
+  {fi:"bussipysäkki",en:"bus stop",cat:"nouns",note:"kk→k: bussipysäki-llä"},
+  {fi:"lentokenttä",en:"airport",cat:"nouns",note:"lentokentä-llä; also: lentoasema"},
+  {fi:"matkalaukku",en:"suitcase",cat:"nouns",note:"kk→k: matkalaukku-a"},
+  {fi:"reppu",en:"backpack",cat:"nouns",note:"pp→p: repu-ssa"},
+  {fi:"lompakko",en:"wallet",cat:"nouns",note:"kk→k: lompako-ssa"},
+  {fi:"viisumi",en:"visa",cat:"nouns",note:"viisumi-a"},
+  {fi:"määränpää",en:"destination",cat:"nouns",note:"määränpää-hän"},
+  {fi:"vaihto",en:"transfer / change",cat:"nouns",note:"vaihto-a"},
+  // ── opinions / feelings verbs ──
+  {fi:"tykätä",en:"to like",cat:"verbs",note:"VT4; tykkää-n + -sta/-stä"},
+  {fi:"inhota",en:"to dislike / loathe",cat:"verbs",note:"VT4; inhoa-n + partitive"},
+  {fi:"vihata",en:"to hate",cat:"verbs",note:"VT4; vihaa-n + partitive"},
+  {fi:"klikata",en:"to click",cat:"verbs",note:"VT4; klikkaa-n"},
+  {fi:"poistaa",en:"to delete / remove",cat:"verbs",note:"VT1 KPT; poista-n"},
+  {fi:"sulkea",en:"to close / shut",cat:"verbs",note:"VT1 KPT; sulje-n"},
+  // ── senses ──
+  {fi:"tuntua",en:"to feel like",cat:"verbs",note:"VT1; tuntuu hyvältä"},
+  {fi:"maistua",en:"to taste",cat:"verbs",note:"VT1; maistuu hyvältä"},
+  {fi:"kuulostaa",en:"to sound like",cat:"verbs",note:"VT1; kuulostaa hyvältä"},
+  {fi:"haista",en:"to smell (bad)",cat:"verbs",note:"VT1; haisee pahalta"},
+  {fi:"tuoksua",en:"to smell (good)",cat:"verbs",note:"VT1; tuoksuu hyvältä"},
+  {fi:"näyttää",en:"to look like / show",cat:"verbs",note:"VT1; näyttää vanhalta"},
+  // ── days of the week ──
+  {fi:"maanantai",en:"Monday",cat:"nouns",note:"maanantaina = on Monday"},
+  {fi:"tiistai",en:"Tuesday",cat:"nouns",note:"tiistaina = on Tuesday"},
+  {fi:"keskiviikko",en:"Wednesday",cat:"nouns",note:"keskiviikkona = on Wednesday"},
+  {fi:"torstai",en:"Thursday",cat:"nouns",note:"torstaina = on Thursday"},
+  {fi:"perjantai",en:"Friday",cat:"nouns",note:"perjantaina = on Friday"},
+  {fi:"lauantai",en:"Saturday",cat:"nouns",note:"lauantaina = on Saturday"},
+  {fi:"sunnuntai",en:"Sunday",cat:"nouns",note:"sunnuntaina = on Sunday"},
+  {fi:"viikonloppu",en:"weekend",cat:"nouns",note:"viikonloppuna = on the weekend"},
+  // ── work / professions ──
+  {fi:"työntekijä",en:"employee",cat:"nouns",note:"työntekijä-n"},
+  {fi:"työnantaja",en:"employer",cat:"nouns",note:"työnantaja-n"},
+  {fi:"työtön",en:"unemployed",cat:"adj",note:"työttömä-n"},
+  {fi:"ammatti",en:"occupation / profession",cat:"nouns",note:"ammatti-a; tt→t: amati-ssa"},
+  {fi:"palkka",en:"salary",cat:"nouns",note:"kk→k: palka-n"},
+  {fi:"sopimus",en:"contract",cat:"nouns",note:"spoken: soppari"},
+  {fi:"opettaja",en:"teacher",cat:"nouns",note:"spoken: ope"},
+  {fi:"ohjelmoija",en:"programmer",cat:"nouns",note:"spoken: koodari; also: koodaaja"},
+  {fi:"kehittäjä",en:"developer",cat:"nouns",note:"spoken: devaaja"},
+  {fi:"insinööri",en:"engineer",cat:"nouns",note:"insinööri-n"},
+  {fi:"rakentaja",en:"construction worker",cat:"nouns",note:"also: rakennustyöntekijä"},
+  {fi:"vartija",en:"guard",cat:"nouns",note:"vartija-n"},
+  {fi:"lähihoitaja",en:"practical nurse",cat:"nouns",note:"lähihoitaja-n"},
+  {fi:"irtisanoutua",en:"to resign",cat:"verbs",note:"VT1; irtisanoudu-n"},
+  {fi:"hakea",en:"to apply for / fetch",cat:"verbs",note:"VT1 KPT; hae-n; hakea työpaikkaa"},
+  // ── comparison ──
+  {fi:"parempi",en:"better",cat:"adj",note:"hyvä → parempi → paras"},
+  {fi:"paras",en:"the best",cat:"adj",note:"parha-an (gen.)"},
+  {fi:"huonompi",en:"worse",cat:"adj",note:"huono → huonompi → huonoin"},
+  {fi:"huonoin",en:"the worst",cat:"adj",note:"huonoimma-n"},
+  {fi:"kuin",en:"than / as / like",cat:"other",note:"hän on pidempi kuin minä"},
+  {fi:"kumpi",en:"which one (of two)?",cat:"other",note:"Kumpi on parempi?"},
+  {fi:"sama",en:"same",cat:"adj",note:"sama-ssa"},
+  {fi:"eri",en:"different",cat:"adj",note:"indeclinable"},
+  {fi:"samanlainen",en:"similar",cat:"adj",note:"samanlaise-n"},
+  {fi:"erilainen",en:"different (kind of)",cat:"adj",note:"erilaise-n"},
+  // ── conjunctions ──
+  {fi:"että",en:"that (conjunction)",cat:"other",note:"Tiedän, että hän tulee."},
+  {fi:"jotta",en:"so that / in order to",cat:"other",note:"Hän tulee, jotta voi auttaa."},
+  {fi:"kun",en:"when (conjunction)",cat:"other",note:"Soitamme, kun tiedämme."},
+  {fi:"jos",en:"if",cat:"other",note:"Jos sataa, jäädään kotiin."},
+  {fi:"vaikka",en:"even though / although",cat:"other",note:"vaikka en tiedä miten"},
+  {fi:"kunnes",en:"until",cat:"other",note:"Odotamme, kunnes meidät kutsutaan."},
+  // ── time expressions ──
+  {fi:"ensi",en:"next",cat:"other",note:"ensi viikolla = next week"},
+  {fi:"viime",en:"last",cat:"other",note:"viime viikolla = last week"},
+  // ── misc new ──
+  {fi:"sisällä",en:"inside",cat:"other",note:"talon sisällä = inside the house"},
+  {fi:"ulkona",en:"outside",cat:"other",note:"ulkona on kylmä"},
+  {fi:"lahja",en:"gift / present",cat:"nouns",note:"lahja-n"},
+  {fi:"hätänumero",en:"emergency number",cat:"nouns",note:"Suomen hätänumero on 112"},
+  {fi:"tulipalo",en:"fire (emergency)",cat:"nouns",note:"tulipalo-ssa"},
+  {fi:"uutiset",en:"news",cat:"nouns",note:"uutiste-n"},
+  {fi:"tärkeä",en:"important",cat:"adj",note:"tärkeä-ä"},
+  {fi:"väsynyt",en:"tired",cat:"adj",note:"väsynee-n"},
+  {fi:"nälkäinen",en:"hungry",cat:"adj",note:"nälkäise-n"},
+  {fi:"janoinen",en:"thirsty",cat:"adj",note:"janoise-n"},
+  {fi:"kautta",en:"via / through",cat:"other",note:"kaupan kautta kotiin = home via shop"},
+  {fi:"helpottaa",en:"to feel better / ease",cat:"verbs",note:"VT1 KPT; helpotta-a"},
+  {fi:"huimata",en:"to feel dizzy",cat:"verbs",note:"minua huimaa"},
+  {fi:"paleltaa",en:"to feel cold",cat:"verbs",note:"minua paleltaa"},
+  {fi:"ahdistaa",en:"to feel anxious",cat:"verbs",note:"minua ahdistaa"},
+  {fi:"masentaa",en:"to feel depressed",cat:"verbs",note:"minua masentaa"},
+  {fi:"stressata",en:"to feel stressed",cat:"verbs",note:"minua stressaa"}
 ];
 
 // ── KPT ──────────────────────────────────────────────
@@ -743,6 +1139,106 @@ var genitiveCards = [
   {sub:"structure", front:"Strength of obligation",        back:"pakko > täytyy > pitää > tarvitsee", example:"pakko = no choice\ntäytyy = must\npitää = should\ntarvitsee = need to"}
 ];
 
+// ── CONDITIONAL ──────────────────────────────────────────────
+var conditionalCards = [
+  {
+    sub:"endings (all types)",
+    front:"Personal endings\nfor all verb types",
+    back:"-isin / -isit / -isi\n-isimme / -isitte / -isivät",
+    example:"minä: -isin\nsinä: -isit\nhän: -isi\nme: -isimme\nte: -isitte\nhe: -isivät"
+  },
+  {
+    sub:"type 1 — stem + isi",
+    front:"Type 1 verbs (-aa/-oa/-ua)\nHow to form conditional?",
+    back:"drop final vowel + -isi-",
+    example:"puhua → puhu- → puhuisin\nostaa → osta- → ostaisin\nasua → asu- → asuisin"
+  },
+  {
+    sub:"type 2 — stem + isi",
+    front:"Type 2 verbs (-da/-dä)\nHow to form conditional?",
+    back:"drop -da/-dä + -isi-",
+    example:"syödä → syö- → söisin\njuoda → juo- → joisin\nmyydä → myy- → myisin"
+  },
+  {
+    sub:"type 3 — stem + isi",
+    front:"Type 3 verbs (-lla/-nna/-rra)\nHow to form conditional?",
+    back:"infinitive stem (drop 2 letters + e) + -isi-",
+    example:"mennä → mene- → menisin\nolla → ole- → olisin\ntulla → tule- → tulisin"
+  },
+  {
+    sub:"type 4 — stem + isi",
+    front:"Type 4 verbs (-ata/-ota)\nHow to form conditional?",
+    back:"drop -ta + double vowel + -isi-",
+    example:"haluta → halua- → haluaisin\nparata → paraa- → paraisin"
+  },
+  {
+    sub:"type 5 — stem + isi",
+    front:"Type 5 verbs (-ita/-itä)\nHow to form conditional?",
+    back:"drop -ta + -tse- stem + -isi-",
+    example:"tarvita → tarvitse- → tarvitsisin"
+  },
+  {
+    sub:"olla → olisi",
+    front:"would be\nolla (irregular)",
+    back:"olisin / olisit / olisi\nolisimme / olisitte / olisivat",
+    example:"Se olisi hienoa! (That would be great!)\nOlisin väsynyt. (I would be tired)\nOlisiko teillä aikaa? (Would you have time?)"
+  },
+  {
+    sub:"voida → voisi",
+    front:"could\nvoida (Type 2)",
+    back:"voisin / voisit / voisi\nvoisimme / voisitte / voisivat",
+    example:"Voisin auttaa. (I could help)\nVoisitko tulla? (Could you come?)"
+  },
+  {
+    sub:"haluta → haluaisi",
+    front:"would like\nhaluta (Type 4)",
+    back:"haluaisin / haluaisit / haluaisi...",
+    example:"Haluaisin kahvia. (I would like coffee)\nHaluaisitko tulla? (Would you like to come?)"
+  },
+  {
+    sub:"negation",
+    front:"Negative conditional\nwouldn't / couldn't",
+    back:"en/et/ei/emme/ette/eivät\n+ conditional stem",
+    example:"En haluaisi mennä. (I wouldn't want to go)\nEi olisi hyvä. (It wouldn't be good)\nEn voisi tulla. (I couldn't come)"
+  },
+  {
+    sub:"polite requests",
+    front:"Conditional = polite!\nCould you / Would you",
+    back:"Voisitko...?\nHaluaisitko...?",
+    example:"Voisitko auttaa minua? (Could you help me?)\nHaluaisitko tulla mukaan?\nOlisiko teillä aikaa? (Would you have time?)"
+  }
+];
+
+function renderConditional() {
+  var grid = document.getElementById('grid-conditional');
+  grid.innerHTML = '';
+  var colors = {
+    'formation':'var(--accent)',
+    'minä — I would':'var(--accent)',
+    'sinä — you would':'var(--accent)',
+    'hän — he/she would':'var(--accent)',
+    'me — we would':'var(--accent)',
+    'te — you (pl) would':'var(--accent)',
+    'he — they would':'var(--accent)',
+    'all endings':'var(--accent3)',
+    'voida → voisi':'var(--accent2)',
+    'haluta → haluaisi':'var(--accent2)',
+    'olla → olisi':'var(--accent2)',
+    'negation':'var(--muted)',
+    'polite requests':'var(--accent3)'
+  };
+  conditionalCards.forEach(function(c, i) {
+    var color = colors[c.sub] || 'var(--accent)';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div>'
+              + '<div class="g-main" style="font-size:1.0rem">' + c.front + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.1rem;color:' + color + '">' + c.back + '</div>'
+              + '<div class="g-example">' + c.example + '</div>';
+    var card = makeCard(front, back, 'cond_' + i);
+    card.style.animationDelay = i * 40 + 'ms';
+    grid.appendChild(card);
+  });
+}
+
 // ── POSTPOSITIONS ──────────────────────────────────────────────
 var postposCards = [
   {post:"edessä",  meaning:"in front of",             example:"talon edessä\n(in front of the house)"},
@@ -758,7 +1254,23 @@ var postposCards = [
   {post:"luona",   meaning:"at / near (someone's place)", example:"Pekan luona\n(at Pekka's place)"},
   {post:"kanssa",  meaning:"with / together with",    example:"ystävän kanssa\n(with a friend)"},
   {post:"kuluttua",meaning:"after (time elapsed)",    example:"tunnin kuluttua\n(after an hour)"},
-  {post:"jälkeen", meaning:"after (in sequence)",     example:"lounaan jälkeen\n(after lunch)"}
+  {post:"jälkeen", meaning:"after (in sequence)",     example:"lounaan jälkeen\n(after lunch)"},
+  {post:"edestä → eteen", meaning:"from front → to front", example:"talon edestä (from front)\ntalon eteen (to the front)"},
+  {post:"takaa → taakse", meaning:"from behind → to behind", example:"auton takaa (from behind)\nauton taakse (to behind)"},
+  {post:"alta → alle", meaning:"from under → to under", example:"pöydän alta (from under)\npöydän alle (to under)"},
+  {post:"päältä → päälle", meaning:"from top → to top", example:"pöydän päältä (from top)\npöydän päälle (onto)"},
+  {post:"keskellä", meaning:"in the middle of",     example:"keskeltä (from middle)\nkeskelle (to the middle)"},
+  {post:"vierestä → viereen", meaning:"from side → to side", example:"kaupan vierestä\nkaupan viereen"},
+  {post:"läpi",    meaning:"through",                example:"kankaan läpi\n(through the fabric)"},
+  {post:"ympäri",  meaning:"around",                 example:"puun ympäri\n(around the tree)"},
+  {post:"poikki / yli", meaning:"across",            example:"tien poikki\n(across the road)"},
+  {post:"ohi",     meaning:"past",                   example:"auto meni ohi\n(a car passed by)"},
+  {post:"lisäksi", meaning:"in addition to",         example:"työn lisäksi\n(in addition to work)"},
+  {post:"päästä",  meaning:"after (time period)",    example:"tunnin päästä\n(after an hour)"},
+  {post:"alussa",  meaning:"in the beginning",       example:"vuoden alussa\n(at the start of the year)"},
+  {post:"lopussa", meaning:"in the end / at the end",example:"päivän lopussa\n(at the end of the day)"},
+  {post:"sisällä", meaning:"within / inside",        example:"talon sisällä\n(inside the house)"},
+  {post:"aikaan",  meaning:"around (time)",          example:"kahden aikaan\n(around two o'clock)"}
 ];
 
 // ── QUESTIONS ──────────────────────────────────────────────
@@ -992,6 +1504,140 @@ function renderQuestions() {
   });
 }
 
+// ── PHRASES ──────────────────────────────────────────────
+var phraseCards = [
+  {sub:"greetings", en:"Hello / Hi", fi:"Moi! / Hei! / Terve!", note:"Moro! / Morjes! / Moikka!"},
+  {sub:"greetings", en:"Bye bye!", fi:"Moi moi! / Heippa! / Hei hei!", note:"same words for hello & bye"},
+  {sub:"greetings", en:"Welcome!", fi:"Tervetuloa!", note:""},
+  {sub:"greetings", en:"Goodbye! (formal)", fi:"Näkemiin!", note:"more formal than moi moi"},
+  {sub:"greetings", en:"Good morning!", fi:"Hyvää huomenta! / Huomenta!", note:""},
+  {sub:"greetings", en:"Good afternoon!", fi:"Hyvää iltapäivää!", note:""},
+  {sub:"greetings", en:"Good evening!", fi:"Hyvää iltaa!", note:""},
+  {sub:"greetings", en:"Good night!", fi:"Hyvää yötä!", note:""},
+  {sub:"greetings", en:"Have a nice day!", fi:"Hyvää päivänjatkoa!", note:"when leaving"},
+  {sub:"greetings", en:"Likewise! / You too!", fi:"Samoin! / Samoin sinulle!", note:""},
+  {sub:"reactions", en:"Oh no!", fi:"Voi ei!", note:""},
+  {sub:"reactions", en:"Yes (informal)", fi:"Joo / Juu", note:"formal: kyllä"},
+  {sub:"reactions", en:"Neutral yes (hmm)", fi:"Jaa...", note:"neutral acknowledgement"},
+  {sub:"reactions", en:"Help!", fi:"Apua!", note:""},
+  {sub:"reactions", en:"Watch out!", fi:"Varo!", note:""},
+  {sub:"asking help", en:"Can you help me?", fi:"Voitko auttaa minua?", note:""},
+  {sub:"asking help", en:"How can I help you?", fi:"Kuinka voin auttaa?", note:""},
+  {sub:"asking help", en:"Sorry, I don't understand.", fi:"Anteeksi, en ymmärrä.", note:""},
+  {sub:"asking help", en:"Can you repeat?", fi:"Voitko toistaa?", note:"toistaa = to repeat"},
+  {sub:"asking help", en:"I can't speak Finnish well.", fi:"En osaa puhua suomea hyvin.", note:""},
+  {sub:"asking help", en:"Could you speak slower?", fi:"Puhuisitko hitaammin?", note:"conditional = polite"},
+  {sub:"asking help", en:"Do you speak English?", fi:"Puhutko englantia?", note:"englanti = English"},
+  {sub:"rules", en:"Prohibited / Forbidden", fi:"Kielletty", note:"tupakointi kielletty = no smoking"},
+  {sub:"rules", en:"Allowed / Permitted", fi:"Sallittu", note:"musiikin soittaminen sallittu"},
+  {sub:"polite", en:"And for you? / What about you?", fi:"Entä sinulle?", note:""},
+  {sub:"polite", en:"For you as well!", fi:"Kuin myös!", note:""},
+  {sub:"personal", en:"What is your phone number?", fi:"Mikä sinun puhelinnumerosi on?", note:""},
+  {sub:"personal", en:"What is your e-mail?", fi:"Mikä sinun sähköpostiosoitteesi on?", note:""},
+  {sub:"personal", en:"What is your postal code?", fi:"Mikä sinun postinumerosi on?", note:""},
+  {sub:"personal", en:"It is... (answer)", fi:"Se on...", note:""},
+  {sub:"birthday", en:"When is your birthday?", fi:"Milloin sinun syntymäpäiväsi on?", note:""},
+  {sub:"birthday", en:"When were you born?", fi:"Milloin olet syntynyt?", note:""},
+  {sub:"birthday", en:"My birthday is...", fi:"Minun syntymäpäiväni on...", note:""},
+  {sub:"birthday", en:"In which month were you born?", fi:"Missä kuussa sinä olet syntynyt?", note:"kuussa = in a month"},
+  {sub:"location", en:"I live in a town", fi:"Asun kaupungissa", note:""},
+  {sub:"location", en:"I live in the countryside", fi:"Asun maalla / maaseudulla", note:""},
+  {sub:"transport", en:"By bike", fi:"Pyörällä", note:""},
+  {sub:"transport", en:"By train", fi:"Junalla", note:""},
+  {sub:"transport", en:"By bus", fi:"Bussilla", note:""},
+  {sub:"transport", en:"By walking", fi:"Kävellen", note:""},
+  // ── home ──
+  {sub:"home", en:"Where do you live?", fi:"Missä sinä asut?", note:""},
+  {sub:"home", en:"What kind of house do you live in?", fi:"Millaisessa talossa sinä asut?", note:""},
+  {sub:"home", en:"How long have you lived here?", fi:"Kuinka kauan olet asunut tässä talossa?", note:""},
+  {sub:"home", en:"I'm going home.", fi:"Menen kotiin.", note:"kotiin = illative"},
+  {sub:"home", en:"I'm (at) home.", fi:"Olen kotona.", note:"kotona = special form"},
+  {sub:"home", en:"I'm coming from home.", fi:"Tulen kotoa.", note:"kotoa = special form"},
+  {sub:"home", en:"Please come in!", fi:"Tule sisälle! / Sisään!", note:""},
+  {sub:"home", en:"I live with my family.", fi:"Asun perheeni kanssa.", note:""},
+  {sub:"home", en:"I'm homesick.", fi:"Minulla on koti-ikävä.", note:"ikävöidä = to miss"},
+  // ── health ──
+  {sub:"health", en:"I want to meet a doctor.", fi:"Haluan tavata lääkärin.", note:""},
+  {sub:"health", en:"I need help.", fi:"Tarvitsen apua.", note:""},
+  {sub:"health", en:"I am in pain.", fi:"Minulla on kipua.", note:"also: Minuun sattuu"},
+  {sub:"health", en:"I feel sick.", fi:"Minulla on paha olo.", note:""},
+  {sub:"health", en:"I feel like throwing up.", fi:"Minua oksettaa.", note:""},
+  {sub:"health", en:"I have difficulties breathing.", fi:"Minun on vaikea hengittää.", note:""},
+  {sub:"health", en:"Get well soon!", fi:"Parane pian!", note:"also: Pikaista paranemista!"},
+  // ── emergency ──
+  {sub:"emergency", en:"Call the emergency number!", fi:"Soita hätänumeroon!", note:"112 in Finland"},
+  {sub:"emergency", en:"He/she has fainted.", fi:"Hän on pyörtynyt.", note:""},
+  {sub:"emergency", en:"He/she has fallen.", fi:"Hän on kaatunut.", note:""},
+  // ── food ──
+  {sub:"food", en:"I'm hungry.", fi:"Minulla on nälkä.", note:"spoken: Mul on nälkä"},
+  {sub:"food", en:"I'm thirsty.", fi:"Minulla on jano.", note:""},
+  {sub:"food", en:"I would like...", fi:"Haluaisin...", note:"conditional = polite"},
+  {sub:"food", en:"Would you like?", fi:"Haluaisitko?", note:""},
+  {sub:"food", en:"No thanks.", fi:"Ei kiitos.", note:"spoken: Ei kiitti"},
+  {sub:"food", en:"Yes please.", fi:"Kyllä kiitos.", note:"spoken: Joo kiitti"},
+  {sub:"food", en:"More!", fi:"Lisää! / Enemmän!", note:""},
+  {sub:"food", en:"I'm making food / cooking.", fi:"Laitan ruokaa. / Kokkaan.", note:""},
+  // ── travel ──
+  {sub:"travel", en:"How can I buy a ticket?", fi:"Miten voin ostaa lipun?", note:""},
+  {sub:"travel", en:"Do I need to change trains?", fi:"Pitääkö minun vaihtaa junaa?", note:""},
+  {sub:"travel", en:"Is this seat free?", fi:"Onko tämä paikka vapaa?", note:""},
+  {sub:"travel", en:"That's my seat.", fi:"Tuo on minun paikkani.", note:""},
+  {sub:"travel", en:"Greetings from Helsinki!", fi:"Terveiset Helsingistä!", note:"terveiset + -sta/-stä"},
+  {sub:"travel", en:"Thanks for the message!", fi:"Kiitos viestistä!", note:"kiitos + -sta/-stä"},
+  // ── electronics ──
+  {sub:"electronics", en:"Please turn the TV on.", fi:"Laita televisio päälle.", note:"päälle = on"},
+  {sub:"electronics", en:"Please shut the TV off.", fi:"Sulje televisio.", note:"sulkea = to close"},
+  {sub:"electronics", en:"Give me the remote.", fi:"Anna kaukosäädin minulle.", note:""},
+  {sub:"electronics", en:"Turn the volume up.", fi:"Säädä ääntä isommalle.", note:""},
+  {sub:"electronics", en:"Turn the volume down.", fi:"Säädä ääntä pienemmälle.", note:""},
+  // ── opinions ──
+  {sub:"opinions", en:"In my opinion...", fi:"Minusta... / Minun mielestä...", note:"spoken: Musta / Mun mielest"},
+  {sub:"opinions", en:"I agree.", fi:"Olen samaa mieltä.", note:""},
+  {sub:"opinions", en:"I disagree.", fi:"Olen eri mieltä.", note:""},
+  {sub:"opinions", en:"I don't know.", fi:"En tiedä.", note:"spoken: En tiiä"},
+  {sub:"opinions", en:"What do you think about it?", fi:"Mitä ajattelet siitä?", note:""},
+  {sub:"opinions", en:"Do you like it?", fi:"Tykkäätkö siitä?", note:"also: Pidätkö siitä?"},
+  // ── senses ──
+  {sub:"senses", en:"The food tastes good.", fi:"Ruoka maistuu hyvältä.", note:"-lta/-ltä with senses"},
+  {sub:"senses", en:"It feels good.", fi:"Se tuntuu hyvältä.", note:""},
+  {sub:"senses", en:"It smells bad.", fi:"Täällä haisee pahalta.", note:""},
+  {sub:"senses", en:"That car looks old.", fi:"Tuo auto näyttää vanhalta.", note:""}
+];
+
+function renderPhrases() {
+  var grid = document.getElementById('grid-phrases');
+  grid.innerHTML = '';
+  var colors = {
+    'greetings':'var(--accent)',
+    'reactions':'var(--accent2)',
+    'asking help':'var(--accent3)',
+    'rules':'var(--muted)',
+    'polite':'var(--accent)',
+    'personal':'var(--accent2)',
+    'birthday':'var(--accent3)',
+    'location':'var(--accent)',
+    'transport':'var(--accent2)',
+    'home':'var(--accent)',
+    'health':'var(--accent3)',
+    'emergency':'var(--muted)',
+    'food':'var(--accent2)',
+    'travel':'var(--accent)',
+    'electronics':'var(--accent3)',
+    'opinions':'var(--accent2)',
+    'senses':'var(--accent)'
+  };
+  phraseCards.forEach(function(c, i) {
+    var color = colors[c.sub] || 'var(--accent)';
+    var front = '<div class="g-label" style="color:' + color + '">' + c.sub + '</div>'
+              + '<div class="g-main" style="font-size:1.0rem">' + c.en + '</div>';
+    var back  = '<div class="g-result" style="font-size:1.1rem;color:' + color + '">' + c.fi + '</div>'
+              + (c.note ? '<div class="g-example">' + c.note + '</div>' : '');
+    var card = makeCard(front, back, 'phr_' + i);
+    card.style.animationDelay = i * 35 + 'ms';
+    grid.appendChild(card);
+  });
+}
+
 // ── STATS ──────────────────────────────────────────────
 function updateStats() {
   document.getElementById('totalCount').textContent = words.length;
@@ -1022,6 +1668,8 @@ document.getElementById('sectionTabs').addEventListener('click', function(e) {
     genitive: renderGenitive,
     possessive: renderPossessive,
     postpos: renderPostpos,
+    conditional: renderConditional,
+    phrases: renderPhrases,
     questions: renderQuestions,
     words: renderWords
   };
@@ -1053,6 +1701,8 @@ document.getElementById('shuffleBtn').addEventListener('click', function() {
     genitive: function() { genitiveCards = shuffle(genitiveCards); renderGenitive(); },
     possessive: function() { possessiveCards = shuffle(possessiveCards); renderPossessive(); },
     postpos: function() { postposCards = shuffle(postposCards); renderPostpos(); },
+    conditional: function() { conditionalCards = shuffle(conditionalCards); renderConditional(); },
+    phrases: function() { phraseCards = shuffle(phraseCards); renderPhrases(); },
     questions: function() { questionCards = shuffle(questionCards); renderQuestions(); }
   };
   if (grids[currentSection]) grids[currentSection]();
